@@ -1,3 +1,5 @@
+import json
+import os
 from typing import Dict, Any
 
 import settings
@@ -6,7 +8,7 @@ from Utils import visualize_regions
 # from test.bases import WorldTestBase
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import launch_subprocess, components, Component, Type
-from worlds.dmc3.Items import item_descriptions, DMC3Item, is_progression, get_item_type, dmc3_items
+from worlds.dmc3.Items import item_descriptions, DMC3Item, get_item_type, dmc3_items
 from worlds.dmc3.Locations import location_descriptions, DMC3Location, dmc3_locations
 from worlds.dmc3.Options import dmc3_options
 from worlds.dmc3.Regions import dmc3_regions
@@ -14,7 +16,7 @@ from worlds.generic.Rules import set_rule, add_rule
 
 
 def launch_client():
-    from .Client import launch
+    from DMC3Client import launch
     launch_subprocess(launch, name="DMC3Client")
 
 
@@ -75,8 +77,10 @@ class DevilMayCry3World(World):
     def generate_early(self) -> None:
         # self.multiworld.push_precollected(dmc3_items[self.options.start_gun.value])
         # self.multiworld.push_precollected(dmc3_items[self.options.start_melee.value])
-        victory_loc = DMC3Location(self.player, "Victory", None)
-        victory_loc.place_locked_item(DMC3Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.push_precollected(self.create_item("rebellion"))
+        self.multiworld.push_precollected(self.create_item("ebony_and_ivory"))
+        # victory_loc = DMC3Location(self.player, "Victory", None)
+        # victory_loc.place_locked_item(DMC3Item("Victory", ItemClassification.progression, None, self.player))
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -88,15 +92,18 @@ class DevilMayCry3World(World):
             for loc in locs:
                 loc_fin = DMC3Location(self.player, loc, self.location_name_to_id.get(loc, None), region)
                 region.locations.append(loc_fin)
-
+            if mission == 20:
+                victory_loc = DMC3Location(self.player, "Victory", None, region)
+                victory_loc.place_locked_item(DMC3Item("Victory", ItemClassification.progression, None, self.player))
+                region.locations.append(victory_loc)
             if mission == 1:
                 menu_region.connect(region)
-            self.multiworld.regions.append(region)
             if mission > 1:
                 self.multiworld.get_region("Mission #{}".format(mission - 1), self.player).connect(region)
-                # region.connect(self.multiworld.get_region("Mission #{}".format(mission - 1), self.player))
-            if dmc3_regions[mission] != [0]:
-                for secret in dmc3_regions[mission]:
+                region.connect(self.multiworld.get_region("Mission #{}".format(mission - 1), self.player))
+            self.multiworld.regions.append(region)
+            if dmc3_regions[mission]["secret"] != [0]:
+                for secret in dmc3_regions[mission]["secret"]:
                     sec_reg = Region("Secret Mission #{}".format(secret), self.player, self.multiworld)
                     sec_reg.locations.append(
                         DMC3Location(self.player, dmc3_locations["Secret Mission #{}".format(secret)][0],
@@ -104,13 +111,11 @@ class DevilMayCry3World(World):
                                          dmc3_locations["Secret Mission #{}".format(secret)][0],
                                          None), region))
                     region.connect(sec_reg)
+                    sec_reg.connect(region)
                     self.multiworld.regions.append(sec_reg)
 
     def create_item(self, item: str) -> DMC3Item:
-        # this is called when AP wants to create an item by name (for plando) or when you call it from your own code
-        classification = ItemClassification.progression if is_progression(item) else ItemClassification.filler
-
-        return DMC3Item(item, classification, self.item_name_to_id[item], self.player)
+        return DMC3Item(item, dmc3_items[item][2], self.item_name_to_id[item], self.player)
 
     def create_items(self) -> None:
         # Add items to the Multiworld.
@@ -125,14 +130,19 @@ class DevilMayCry3World(World):
         for item in map(self.create_item, dmc3_items):
             if item in exclude:
                 exclude.remove(item)  # this is destructive. create unique list above
-                self.multiworld.itempool.append(self.create_item("nothing"))
+                self.multiworld.itempool.append(self.create_item("vital_star_s"))
             else:
                 self.multiworld.itempool.append(item)
 
         # itempool and number of locations should match up.
         # If this is not the case we want to fill the itempool with junk.
-        junk = 0  # calculate this based on player options
-        self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
+        junk = 40  # calculate this based on player options
+        self.multiworld.itempool += [self.create_item("vital_star_s") for _ in range(junk)]
+        # for _ in range(len(self.multiworld.get_locations(self.player)) - len(self.multiworld.itempool)): #len(dmc3_locations):
+        #     self.multiworld.itempool.append(self.create_item("vital_star_s"))
+        # itempool = []
+        # itempool += self.multiworld.random.choices(list("vital_star_s"), weights=list([1]),
+        #                                            k=len(self.location_names) - len(itempool))
 
     def set_rules(self) -> None:
 
@@ -186,8 +196,8 @@ class DevilMayCry3World(World):
         # place "Victory" at "Final Boss" and set collection as win condition
         # self.multiworld.get_location("Beat Vergil 3", self.player).place_locked_item(self.create_event("Victory"))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Beat Vergil 3", self.player)
-
+        # self.multiworld.completion_condition[self.player] = lambda state: state.has("Beat Vergil 3", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
         # for debugging purposes, you may want to visualize the layout of your world. Uncomment the following code to
         # write a PlantUML diagram to the file "my_world.puml" that can help you see whether your regions and locations
         # are connected and placed as desired
@@ -199,37 +209,16 @@ class DevilMayCry3World(World):
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "items": {location.name: location.item.name
-            if location.item.player == self.player else "Remote"
-                      for location in self.multiworld.get_filled_locations(self.player)},
+            if location.item.player == self.player else "Remote" for location in
+                      self.multiworld.get_filled_locations(self.player)},
             # store start_inventory from player's .yaml
             # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
             "starter_items": [item.name for item in self.multiworld.precollected_items[self.player]],
         }
-        # json.dump(data)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         # In order for our game client to handle the generated seed correctly we need to know what the user selected
-        # for their difficulty and final boss HP.
-        # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting.
-        # The options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the relevant
-        # option's value.
+        # for their difficulty and final boss HP. A dictionary returned from this method gets set as the slot_data
+        # and will be sent to the client after connecting. The options dataclass has a method to return a `Dict[str,
+        # Any]` of each option name provided and the relevant option's value.
         return self.options.as_dict("random_adjudicators", "start_melee", "start_gun", "start_melee")
-
-# class MyGameTestBase(WorldTestBase):
-#     game = "Devil May Cry 3"
-
-
-# class TestChestAccess(MyGameTestBase):
-#     def test_sword_chests(self) -> None:
-#         """Test locations that require a sword"""
-#         locations = ["Chest1", "Chest2"]
-#         items = [["Sword"]]
-#         # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained
-#         self.assertAccessDependency(locations, items)
-#
-#     def test_any_weapon_chests(self) -> None:
-#         """Test locations that require any weapon"""
-#         locations = [f"Chest{i}" for i in range(3, 6)]
-#         items = [["Sword"], ["Axe"], ["Spear"]]
-#         # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them
-#         self.assertAccessDependency(locations, items)

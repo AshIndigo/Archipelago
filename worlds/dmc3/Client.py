@@ -1,2 +1,0 @@
-def launch():
-    return None

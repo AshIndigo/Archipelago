@@ -21,7 +21,7 @@ dmc3_locations: dict[str, DMC3LocationData] = {
     "Mission #3 - Combat Adjudicator #1": ("Mission #3 - Combat Adjudicator #1", 3),
     "Mission #3 - Cerberus": ("Mission #3 - Cerberus", 3),
 
-    "Mission #4 - Blue Orb Fragment #2": ("Mission #4 - Blue Orb Fragment #2", 3),
+    "Mission #4 - Blue Orb Fragment #2": ("Mission #4 - Blue Orb Fragment #2", 4),
     "Mission #4 - Astronomical Board": ("Mission #4 - Astronomical Board", 4),
 
     "Mission #5 - Vajura": ("Mission #5 - Vajura", 5),
@@ -100,7 +100,7 @@ dmc3_locations: dict[str, DMC3LocationData] = {
     "Mission #19 - Vital Star L": ("Mission #19 - Vital Star L", 19),
     "Mission #19 - Samsara": ("Mission #19 - Samsara", 19),
 
-    "Beat Vergil 3": ("Beat Vergil 3", 20),
+    #"Beat Vergil 3": ("Beat Vergil 3", 20),
 
     # Secret Missions (All are Blue Orbs)
     "Secret Mission #1": ("Secret Mission #1", 21, True),
