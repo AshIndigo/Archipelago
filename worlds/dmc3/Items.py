@@ -18,15 +18,6 @@ class ItemData(NamedTuple):
 
 dmc3_items: dict[str, ItemData] = {
     # Orbs
-    # ItemData("red_s", 0x00, ItemClassification.filler, item_descriptions["N/A"]),
-    # ItemData("gold_orb", 0x01, ItemClassification.useful, item_descriptions["N/A"]),
-    # ItemData("??", 0x02, ItemClassification.useful, item_descriptions["N/A"]),
-    #
-    # ItemData("??", 0x03, ItemClassification.useful, item_descriptions["N/A"]),
-    # ItemData("??", 0x04, ItemClassification.useful, item_descriptions["N/A"]),
-    # ItemData("??", 0x05, ItemClassification.useful, item_descriptions["N/A"]),
-
-    # ItemData("yellow_orb", 0x06, ItemClassification.useful, item_descriptions["N/A"]),
     "blue_orb": ItemData("blue_orb", 0x07, ItemClassification.useful, item_descriptions["N/A"]),
     "purple_orb": ItemData("purple_orb", 0x08, ItemClassification.useful, item_descriptions["N/A"]),
     "blue_fragment": ItemData("blue_fragment", 0x09, ItemClassification.useful, item_descriptions["N/A"]),
@@ -47,7 +38,7 @@ dmc3_items: dict[str, ItemData] = {
     "beowulf": ItemData("beowulf", 0x1B, ItemClassification.useful, item_descriptions["N/A"]),
 
     # Guns
-    "ebony_ivory": ItemData("ebony_ivory", 0x1C, ItemClassification.useful, item_descriptions["N/A"]),
+    "ebony_and_ivory": ItemData("ebony_and_ivory", 0x1C, ItemClassification.useful, item_descriptions["N/A"]),
     "shotgun": ItemData("shotgun", 0x1D, ItemClassification.useful, item_descriptions["N/A"]),
     "artemis": ItemData("artemis", 0x1E, ItemClassification.useful, item_descriptions["N/A"]),
     "spiral": ItemData("spiral", 0x1F, ItemClassification.useful, item_descriptions["N/A"]),
@@ -56,14 +47,15 @@ dmc3_items: dict[str, ItemData] = {
     # Key items
     "astroboard": ItemData("astroboard", 0x24, ItemClassification.progression, item_descriptions["Astronomical Board"]),
     "vajura": ItemData("vajura", 0x25, ItemClassification.progression, item_descriptions["N/A"]),
-    "high_roller": ItemData("high_roller", 0x26, ItemClassification.progression, item_descriptions["N/A"]),
+    # "high_roller": ItemData("high_roller", 0x26, ItemClassification.progression, item_descriptions["N/A"]),
     "soul_of_steel": ItemData("soul_of_steel", 0x27, ItemClassification.progression, item_descriptions["N/A"]),
     "essence_fighting": ItemData("essence_fighting", 0x28, ItemClassification.progression, item_descriptions["N/A"]),
     "essence_technique": ItemData("essence_technique", 0x29, ItemClassification.progression, item_descriptions["N/A"]),
     "essence_intelligence": ItemData("essence_intelligence", 0x2A, ItemClassification.progression,
                                      item_descriptions["N/A"]),
     # These 5 may be wrong
-    "orihalcon_fragment": ItemData("orihalcon_fragment", 0x2B, ItemClassification.progression, item_descriptions["N/A"]),
+    "orihalcon_fragment": ItemData("orihalcon_fragment", 0x2B, ItemClassification.progression,
+                                   item_descriptions["N/A"]),
     "sirens_shriek": ItemData("sirens_shriek", 0x2C, ItemClassification.progression, item_descriptions["N/A"]),
     "crystal_skull": ItemData("crystal_skull", 0x2E, ItemClassification.progression, item_descriptions["N/A"]),
     "ignis_fatuus": ItemData("ignis_fatuus", 0x2F, ItemClassification.progression, item_descriptions["N/A"]),
@@ -84,7 +76,8 @@ dmc3_items: dict[str, ItemData] = {
 
 class Type(Enum):
     MELEE = 0
-    GUN = 1
+    GUN = 1,
+    KEY = 2
 
 
 weapons: [(ItemData, Type)] = {
@@ -95,20 +88,30 @@ weapons: [(ItemData, Type)] = {
     (dmc3_items["nevan"], Type.MELEE),
     (dmc3_items["beowulf"], Type.MELEE),
 
-    (dmc3_items["ebony_ivory"], Type.GUN),
+    (dmc3_items["ebony_and_ivory"], Type.GUN),
     (dmc3_items["shotgun"], Type.GUN),
     (dmc3_items["artemis"], Type.GUN),
     (dmc3_items["spiral"], Type.GUN),
     (dmc3_items["kalina_ann"], Type.GUN),
 }
 
+key_items: [str] = [
+    "astroboard", "vajura", "soul_of_steel", "essence_fighting", "essence_technique", "essence_intelligence",
+    "orihalcon_fragment", "sirens_shriek", "crystal_skull", "ignis_fatuus", "ambrosia", "stone_mask", "neo_generator",
+    "haywire_neo_generator", "full_orihalcon", "orihalcon_right", "orihalcon_left", "orihalcon_bottom", "golden_sun",
+    "onyx_moonshard", "samsara"
+
+]
+
 
 class DMC3Item(Item):
     game = "Devil May Cry 3"
 
 
-def is_progression(self):
-    return True
+# def is_progression(item_name):
+#     if item_name in key_items:
+#         return True
+#     return False
 
 
 def get_item_type(self):
