@@ -75,7 +75,7 @@ dmc1_items: dict[str, ItemData] = {
 }
 
 key_items: list[str] = [
-
+    k for k, v in dmc1_items.items() if v.code in range(17, 34) or "Rusty Key" in k
 ]
 
 junk_pool: dict[str, int] = {

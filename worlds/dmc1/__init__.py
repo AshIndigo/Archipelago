@@ -1,10 +1,9 @@
-from dataclasses import asdict
-from typing import Dict, Any, TextIO
+from typing import Dict, Any
 
-from BaseClasses import Tutorial, Region
+from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import item_descriptions, DMC1Item, dmc1_items, ItemData, junk_pool, item_name_groups
-from .Locations import location_descriptions, DMC1Location, BaseLocationData, \
+from .Locations import location_descriptions, DMC1Location, \
     dmc1_locations, location_name_groups
 from .Options import DMC1Options
 from .Regions import dmc1_regions, setup_linear_goal
