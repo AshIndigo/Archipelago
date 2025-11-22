@@ -23,7 +23,7 @@ item_name_groups = {
 
 dmc1_items: dict[str, ItemData] = {
     # Guns
-    # "Handgun": ItemData(0, ItemClassification.useful),
+    "Handgun": ItemData(0, ItemClassification.useful),
     "Shotgun": ItemData(1, ItemClassification.useful),
     "Needlegun": ItemData(2, ItemClassification.progression),
     "Grenade Launcher": ItemData(3, ItemClassification.useful),
@@ -59,7 +59,7 @@ dmc1_items: dict[str, ItemData] = {
     "Quicksilver": ItemData(30, ItemClassification.progression),
     "Philosopher's Egg": ItemData(31, ItemClassification.progression),
     # Egg is turned into Elixir in M18
-    "Philosopher's Elixir": ItemData(32, ItemClassification.progression),
+    "Elixir": ItemData(32, ItemClassification.progression),
     "Philosopher's Stone": ItemData(33, ItemClassification.progression),
     # Unused
     "Blue Orb Fragment": ItemData(34, ItemClassification.filler),

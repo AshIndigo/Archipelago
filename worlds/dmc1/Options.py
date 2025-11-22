@@ -16,7 +16,7 @@ class StartMelee(Choice):
 class StartGun(Choice):
     """Set your starting gun"""
     display_name = "Starting Gun"
-    #option_handgun = 0
+    option_handgun = 0
     option_shotgun = 1
     #option_needlegun = 2
     option_grenade_launcher = 3
