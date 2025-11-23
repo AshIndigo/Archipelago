@@ -181,7 +181,7 @@ dmc1_locations: dict[str, BaseLocationData] = ({
 
 location_name_groups = {
     f"Mission #{numb}": [location for location, data in dmc1_locations.items() if data.mission_number == numb] for numb in range(1,24)
-}|{"Secret Missions": [f"Secret Mission #{numb}"] for numb in range(1,13)}
+}|{"Secret Missions": [f"Secret Mission #{numb}"] for numb in range(1,12)}|{"Secret Missions": ["Secret Mission #12 - Bangle of Time", "Secret Mission #12 - Blue Orb"]}
 
 class DMC1Location(Location):
     game = "Devil May Cry 1"

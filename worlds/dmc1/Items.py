@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from BaseClasses import ItemClassification, Item
 
 item_descriptions = {
-    "Rusty Key": "A key that opens a door",
+    "Rusty Key (Mission #1)": "A key that opens a door in Mission #1",
     "Vital Star": "A consumable item that heals Dante",
 }
 
@@ -16,14 +16,14 @@ class ItemData:
 
 item_name_groups = {
     "melees": ["Force Edge", "Alastor", "Ifrit", "Sparda"],
-    "guns": ["Ebony & Ivory", "Shotgun", "Needlegun", "Grenade Launcher", "Nightmare Beta"],
+    "guns": ["Handgun", "Shotgun", "Needlegun", "Grenade Launcher", "Nightmare Beta"],
     "upgradable_skills": ["Alastor - Progressive Stinger", "Alastor - Progressive Vortex",
                           "Ifrit - Progressive Kick 13", "Ifrit - Progressive Meteor"]
 }
 
 dmc1_items: dict[str, ItemData] = {
     # Guns
-    "Handgun": ItemData(0, ItemClassification.useful),
+    "Handgun": ItemData(39, ItemClassification.useful), # Lazy fix
     "Shotgun": ItemData(1, ItemClassification.useful),
     "Needlegun": ItemData(2, ItemClassification.progression),
     "Grenade Launcher": ItemData(3, ItemClassification.useful),

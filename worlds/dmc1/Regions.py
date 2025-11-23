@@ -47,7 +47,7 @@ def setup_linear_goal(mission: int, mission_name: str, current_region: Region, w
             prev_mission = world.dmc1_mission_order[idx - 1]
             world.get_region(f"Mission #{prev_mission}").add_exits([mission_name])
 
-    if world.dmc1_mission_order[19] == mission:
+    if world.dmc1_mission_order[22] == mission:
         victory_loc = DMC1Location(world.player, "Final Mission", None,
                                    current_region)
         victory_loc.place_locked_item(
@@ -98,11 +98,24 @@ def create_regions(self) -> None:
         # Secret mission handling
         if data["secret"] != [0]:
             for secret in data["secret"]:
-                secret_mission_name = f"Secret Mission #{secret}"
-                secret_region = Region(secret_mission_name, self.player, self.multiworld)
-                secret_region.locations.append(DMC1Location(self.player, secret_mission_name,
-                                                            self.location_name_to_id.get(
-                                                                secret_mission_name, None), current_region))
-                current_region.connect(secret_region)
-                self.multiworld.regions.append(secret_region)
-                secret_region.add_exits(["Menu", mission_name])
+
+                    secret_mission_name = f"Secret Mission #{secret}"
+                    secret_region = Region(secret_mission_name, self.player, self.multiworld)
+                    if secret is not 12:
+                        secret_region.locations.append(DMC1Location(self.player, secret_mission_name,
+                                                                self.location_name_to_id.get(
+                                                                    secret_mission_name, None), current_region))
+                    else:
+                        secret_mission_name_blue = "Secret Mission #12 - Blue Orb"
+                        secret_mission_name_bangle = "Secret Mission #12 - Bangle of Time"
+                        bangle_loc = DMC1Location(self.player, secret_mission_name_bangle,
+                                                                    self.location_name_to_id.get(
+                                                                        secret_mission_name_bangle, None), current_region)
+                        blue_loc = DMC1Location(self.player, secret_mission_name_blue,
+                                                  self.location_name_to_id.get(
+                                                      secret_mission_name_blue, None), current_region)
+                        secret_region.locations.append(bangle_loc)
+                        secret_region.locations.append(blue_loc)
+                    current_region.connect(secret_region)
+                    self.multiworld.regions.append(secret_region)
+                    secret_region.add_exits(["Menu", mission_name])
