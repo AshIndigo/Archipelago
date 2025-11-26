@@ -26,15 +26,19 @@ dmc1_locations: dict[str, BaseLocationData] = ({
     "Mission #1 - Blue Orb Fragment #1": BaseLocationData(mission_number=1, room_number=33, default_item=34, track_number=1),
 
     # M1
-    "Mission #1 - Rusty Key": BaseLocationData(mission_number=1, room_number=0, default_item=16, track_number=1),
+    "Mission #1 - Rusty Key": BaseLocationData(mission_number=1, room_number=3, default_item=16, track_number=1),
+    # Main Hall
     "Mission #1 - Blue Orb Fragment #2": BaseLocationData(mission_number=1, room_number=0, default_item=34, track_number=1), # room 0?
-    "Mission #1 - Blue Orb Fragment #3": BaseLocationData(mission_number=1, room_number=0, default_item=34, track_number=1),
-    "Mission #1 - Blue Orb Fragment #4": BaseLocationData(mission_number=1, room_number=0, default_item=34, track_number=1),
-    "Mission #1 - Blue Orb Fragment #5": BaseLocationData(mission_number=1, room_number=0, default_item=34, track_number=1),
+    # Knight room passed 45 red orb door
+    "Mission #1 - Blue Orb Fragment #3": BaseLocationData(mission_number=1, room_number=1, default_item=34, track_number=1),
+    # Castle room that wants the trident
+    "Mission #1 - Blue Orb Fragment #4": BaseLocationData(mission_number=1, room_number=28, default_item=34, track_number=1),
+    # Plane room
+    "Mission #1 - Blue Orb Fragment #5": BaseLocationData(mission_number=1, room_number=27, default_item=34, track_number=1),
 
     # M2
     "Mission #2 - Blue Orb Fragment #6": BaseLocationData(mission_number=2, room_number=0, default_item=34, track_number=1),
-    "Mission #2 - Alastor": BaseLocationData(mission_number=2, room_number=0, default_item=8, track_number=1),
+    "Mission #2 - Alastor": BaseLocationData(mission_number=2, room_number=8, default_item=8, track_number=1),
     "Mission #2 - Shotgun": BaseLocationData(mission_number=2, room_number=0, default_item=1, track_number=1),
     "Mission #2 - Staff of Judgement": BaseLocationData(mission_number=2, room_number=0, default_item=17, track_number=1),
     "Mission #2 - Rusty Key": BaseLocationData(mission_number=2, room_number=0, default_item=36, track_number=1),
