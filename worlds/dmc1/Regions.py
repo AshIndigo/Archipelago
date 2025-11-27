@@ -101,7 +101,7 @@ def create_regions(self) -> None:
 
                     secret_mission_name = f"Secret Mission #{secret}"
                     secret_region = Region(secret_mission_name, self.player, self.multiworld)
-                    if secret is not 12:
+                    if secret != 12:
                         secret_region.locations.append(DMC1Location(self.player, secret_mission_name,
                                                                 self.location_name_to_id.get(
                                                                     secret_mission_name, None), current_region))

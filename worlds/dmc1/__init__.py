@@ -20,7 +20,7 @@ def launch_client(*args: str):
 
 
 components.append(Component("Devil May Cry 1 Client", "DMC1Client", func=launch_client,
-                            component_type=Type.CLIENT))
+                            component_type=Type.CLIENT, game_name="Devil May Cry 1"))
 
 
 # icon_paths['dante'] = local_path('data', 'dante.png')
