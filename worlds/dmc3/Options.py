@@ -250,7 +250,7 @@ class MissionOrderWeights(OptionCounter):
     (If you don't know what to do, leave this alone)
     """
     display_name = "Mission Order Weights"
-    valid_keys = [f"Mission #{mission_name}" for mission_name in range(1, 21)]
+    valid_keys = [f"Mission #{mission_name}" for mission_name in range(1, 20)]
     min = 1
     # Most missions are fine to start with, want to avoid getting Vergil fights and M19 though
     default = {
@@ -273,7 +273,7 @@ class MissionOrderWeights(OptionCounter):
         "Mission #17": 20,
         "Mission #18": 5,
         "Mission #19": 5,
-        "Mission #20": 1,
+        #"Mission #20": 1,
     }
 
 

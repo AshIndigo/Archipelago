@@ -123,7 +123,7 @@ class DevilMayCry3World(World):
         int_weights = {mission: self.options.mission_weights.value.get(
             f"Mission #{mission}",
             self.options.mission_weights.default[f"Mission #{mission}"])
-            for mission in range(1, 21)}
+            for mission in range(1, 20)}
         pool = list(int_weights.items())
         result = []
 
@@ -135,7 +135,8 @@ class DevilMayCry3World(World):
             result.append(chosen)
 
             pool = [(k, w) for k, w in pool if k != chosen]
-
+        # Ensure Mission 20 is always last because of unfixed bug
+        result.append(20)
         self.dmc3_mission_order = result
 
     def __init__(self, world, player: int):
