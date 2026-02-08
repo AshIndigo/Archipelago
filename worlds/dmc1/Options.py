@@ -21,7 +21,7 @@ class StartGun(Choice):
     #option_needlegun = 2
     option_grenade_launcher = 3
     option_nightmare_beta = 4
-    default = 1
+    default = 0
 
 
 class RandomizeSkills(Toggle):

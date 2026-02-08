@@ -170,12 +170,6 @@ class DevilMayCry1World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         data = {
-            'seed': self.multiworld.seed_name,
-            'items': {
-                location.name: dict(item_id=location.item.code,
-                                    owner=location.item.player) for location in
-                self.multiworld.get_filled_locations(self.player)
-            },
             'starter_items': [item.name for item in self.multiworld.precollected_items[self.player]],
             'generated_version': self.world_version
         }

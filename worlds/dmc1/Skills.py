@@ -3,10 +3,10 @@ from .Items import ItemData
 
 weapon_skills: dict[str, ItemData] = {
     # Alastor
-    "Alastor - Progressive Stinger": ItemData(100, ItemClassification.useful),  # Two levels
+    "Alastor - Progressive Stinger": ItemData(100, ItemClassification.progression),  # Two levels
     "Alastor - Round Trip": ItemData(102, ItemClassification.useful),
-    "Alastor - Air Hike": ItemData(103, ItemClassification.useful),
-    "Alastor - Air Raid": ItemData(104, ItemClassification.useful),
+    "Alastor - Air Hike": ItemData(103, ItemClassification.progression),
+    "Alastor - Air Raid": ItemData(104, ItemClassification.progression),
     "Alastor - Progressive Vortex": ItemData(105, ItemClassification.useful),  # Two levels
 
     # Ifrit
