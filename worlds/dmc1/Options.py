@@ -78,6 +78,28 @@ class DMC1Goal(Choice):
     option_random_order = 2
     default = 0
 
+class ShopOrbChecks(Toggle):
+    """
+    Add checks to the store.
+
+    This includes both Blue and Purple Orbs
+    """
+    display_name = "Orb Checks"
+
+class AutoOrbHints(Choice):
+    """
+    What types of hints should be automatically created
+
+    * All will auto hint all orb purchases
+    * None will result in no hints
+    """
+
+    # * Current will only create hints for the available orb checks. I.e Blue Orb #1 when starting a new game
+    display_name = "Auto Orb Hints"
+    option_all = 0
+    #option_current = 1
+    option_none = 2
+    default = 0
 
 class MissionShuffle(Choice):
     """
@@ -154,9 +176,12 @@ class DMC1Options(PerGameCommonOptions):
     purple_orb_mode: PurpleOrbMode
     devil_trigger_mode: DevilTriggerMode
     goal: DMC1Goal
+    shop_orb_checks: ShopOrbChecks
+    auto_orb_hints: AutoOrbHints
     mission_shuffle: MissionShuffle
     mission_weights: MissionOrderWeights
     mission_group: MissionOrderGroup
+
 
 dmc1_presets = {
     "Ash's Default": {

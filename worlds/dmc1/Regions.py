@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from BaseClasses import Region, ItemClassification
 from .Items import DMC1Item
-from .Locations import DMC1Location, dmc1_locations
+from .Locations import DMC1Location, dmc1_locations, default_shop_locations
 
 
 class Mission(TypedDict):
@@ -67,6 +67,11 @@ def setup_all_goal(mission: int, mission_name: str, current_region: Region, worl
 def create_regions(self) -> None:
     # Menu
     menu_region = Region("Menu", self.player, self.multiworld)
+    if self.options.shop_orb_checks:
+        menu_region.add_locations({
+            m_loc: self.location_name_to_id[m_loc]
+            for m_loc in [loc for loc in default_shop_locations]
+        }, DMC1Location)
     self.multiworld.regions.append(menu_region)
     # Setup missions+secret missions
     for mission_idx in range(23):

@@ -9,15 +9,33 @@ location_descriptions = {
 
 @dataclass
 class BaseLocationData:
-    mission_number: int  # Mission Number, 0 if irrelevant
-    room_number: int  # Room Number
-    track_number: int
-    default_item: int  # Default Item
+    mission_number: int = 0  # Mission Number, 0 if irrelevant
+    room_number: int = 0 # Room Number
+    track_number: int = 0
+    default_item: int = 0 # Default Item
     secret: bool = False  # Secret mission?
     offset: int = 0x0  # Offset
     xCoord: int = 0
     yCoord: int = 0
     zCoord: int = 0
+
+default_shop_locations: dict[str, BaseLocationData] = ({
+    # Blue Orb Purchases
+    "Purchase Blue Orb #1": BaseLocationData(),
+    "Purchase Blue Orb #2": BaseLocationData(),
+    "Purchase Blue Orb #3": BaseLocationData(),
+    "Purchase Blue Orb #4": BaseLocationData(),
+    "Purchase Blue Orb #5": BaseLocationData(),
+    "Purchase Blue Orb #6": BaseLocationData(),
+    # Purple Orb Purchases
+    "Purchase Purple Orb #1": BaseLocationData(),
+    "Purchase Purple Orb #2": BaseLocationData(),
+    "Purchase Purple Orb #3": BaseLocationData(),
+    "Purchase Purple Orb #4": BaseLocationData(),
+    "Purchase Purple Orb #5": BaseLocationData(),
+    "Purchase Purple Orb #6": BaseLocationData(),
+    "Purchase Purple Orb #7": BaseLocationData(),
+})
 
 dmc1_locations: dict[str, BaseLocationData] = ({
     # M1 Prologue
@@ -259,8 +277,7 @@ dmc1_locations: dict[str, BaseLocationData] = ({
     "Secret Mission #12 - Blue Orb": BaseLocationData(mission_number=35, room_number=3, secret=True, default_item=6, track_number=4),
 }|
     {"Mission #{} Complete".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0, track_number=0)
-     for mission_numb in range(1,24)})
-# TODO Need to add purchase orb checks since I got that figured out
+     for mission_numb in range(1,24)}|default_shop_locations)
 
 location_name_groups = {
     f"Mission #{numb}": [location for location, data in dmc1_locations.items() if data.mission_number == numb] for numb in range(1,24)
