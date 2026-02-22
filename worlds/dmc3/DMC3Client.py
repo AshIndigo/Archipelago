@@ -46,6 +46,7 @@ class DMC3Context(CommonContext):
         super().__init__(server_address, password)
         self.proxy = None
         self.proxy_task = None
+        self.autoreconnect_task = None
         self.endpoint = None
         self.items_handling = 0b111
         self.room_info = None
@@ -79,12 +80,6 @@ class DMC3Context(CommonContext):
             await self.endpoint.socket.close()
         if self.proxy_task is not None:
             await self.proxy_task
-
-    async def disconnect(self, allow_autoreconnect: bool = False):
-        print("Disconnected!")
-        await super().disconnect(allow_autoreconnect)
-        # if self.endpoint and not self.endpoint.socket.closed:
-        #     await self.endpoint.socket.close()
 
     def is_connected(self) -> bool:
         return self.server and self.server.socket.open
@@ -173,21 +168,13 @@ async def proxy(websocket, path: str = "/", ctx: DMC3Context = None):
                             await ctx.disconnect_proxy()
                             break
 
-                        if ctx.seed_name:
-                            seed_name = msg.get("seed_name", "")
-                            if seed_name != "" and seed_name != ctx.seed_name:
-                                logger.info("Aborting proxy connection: seed mismatch from save file")
-                                logger.info(f"Expected: {ctx.seed_name}, got: {seed_name}")
-                                text = encode([{"cmd": "PrintJSON",
-                                                "data": [{"text": "Connection aborted - save file to seed mismatch"}]}])
-                                await ctx.send_message_to_game(text)
-                                await ctx.disconnect_proxy()
-                                break
-
                         if ctx.connected_msg and ctx.is_connected():
                             await ctx.send_message_to_game(ctx.connected_msg)
                             ctx.update_items()
                         continue
+
+                    if not ctx.is_proxy_connected():
+                        break
 
                     if msg["cmd"] == "ConnectUpdate":
                         ctx.tags = msg["tags"]
@@ -198,9 +185,6 @@ async def proxy(websocket, path: str = "/", ctx: DMC3Context = None):
                             if "DeathLink" not in ctx.tags:
                                 print("Deathlink was disabled")
                                 break
-
-                    if not ctx.is_proxy_connected():
-                        break
 
                     await ctx.send_msgs([msg])
 

@@ -17,15 +17,18 @@ from ..LauncherComponents import Component, components, launch as launch_compone
 
 DEBUG = False
 
+
 class DMC3Settings(settings.Group):
     class FloorsPerHint(int):
         """Amount of BP floors needed to generate a hint"""
 
     floors_per_hint: FloorsPerHint = FloorsPerHint(50)
 
+
 def launch_client(*args: str):
     from .DMC3Client import launch
     launch_component(launch, name="DMC3Client", args=args)
+
 
 def launch_hint_client(*args: str):
     from .DMC3HintClient import launch
@@ -154,7 +157,7 @@ class DevilMayCry3World(World):
                 if key == "adjudicators":
                     self.options.random_adjudicators.value = True
                     self.adjudicator_generated_values = {
-                        k: Adjudicator(weapon = v["weapon"], ranking = v["ranking"]) for k, v in value.items()
+                        k: Adjudicator(weapon=v["weapon"], ranking=v["ranking"]) for k, v in value.items()
                     }
                 if key == "shop_checks":
                     self.options.shop_orb_checks.value = True
@@ -192,7 +195,8 @@ class DevilMayCry3World(World):
                     self.create_item(get_weapon_name_from_option(option_value))
                 )
 
-        if self.options.goal == self.options.goal.option_random_order and not hasattr(self.multiworld, "generation_is_fake"):
+        if self.options.goal == self.options.goal.option_random_order and not hasattr(self.multiworld,
+                                                                                      "generation_is_fake"):
             match self.options.mission_shuffle.value:
                 case self.options.mission_shuffle.option_rng:
                     self.random.shuffle(self.dmc3_mission_order)
@@ -368,15 +372,20 @@ class DevilMayCry3World(World):
                                          "randomize_skills", "randomize_gun_levels", "randomize_styles",
                                          "purple_orb_mode",
                                          "devil_trigger_mode", "goal", "mission_clear_rank", "mission_clear_difficulty",
-                                         "initially_unlocked_difficulties", "check_ss_difficulty", "shop_orb_checks", "shop_gun_checks",
-                                         "death_link", toggles_as_bools=True))
+                                         "initially_unlocked_difficulties", "check_ss_difficulty",
+                                         "shop_orb_checks", "shop_gun_checks", "shop_skill_checks",
+                                         "auto_orb_hints", "auto_gun_hints", "auto_skill_hints",
+                                                                              "death_link", toggles_as_bools=True))
         return data
 
     # Universal Tracker support
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
         # Error if APWorld versions don't match
         if Version(*slot_data["generated_version"]) != self.world_version:
-            raise Exception("Current DMC3 APWorld version ({}) does not match slot data version ({})".format(self.world_version, Version(*slot_data["generated_version"])))
+            raise Exception(
+                "Current DMC3 APWorld version ({}) does not match slot data version ({})".format(self.world_version,
+                                                                                                 Version(*slot_data[
+                                                                                                     "generated_version"])))
         # Trigger a regen in UT
         return slot_data
 

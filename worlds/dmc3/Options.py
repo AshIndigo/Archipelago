@@ -41,6 +41,7 @@ class StartMelee(Choice):
     option_beowulf = 4
     default = 0
 
+
 class StartSecondMelee(Choice):
     """Set your second starting melee weapon"""
     display_name = "Starting Second Melee"
@@ -63,6 +64,7 @@ class StartGun(Choice):
     option_kalina_ann = 9
     default = 5
 
+
 class StartSecondGun(Choice):
     """Set your starting gun"""
     display_name = "Starting Second Gun"
@@ -78,6 +80,7 @@ class StartSecondGun(Choice):
 class RandomizeSkills(Toggle):
     """Should weapon skills be items?"""
     display_name = "Randomize Skills"
+
 
 class RandomizeGunLevels(Toggle):
     """Should gun levels be items?"""
@@ -273,7 +276,7 @@ class MissionOrderWeights(OptionCounter):
         "Mission #17": 20,
         "Mission #18": 5,
         "Mission #19": 5,
-        #"Mission #20": 1,
+        # "Mission #20": 1,
     }
 
 
@@ -285,6 +288,7 @@ class DMC3ExcludeLocations(ExcludeLocations):
         {f"Mission #{mission_numb} SS Rank" for mission_numb in range(1, 21)}
     )
 
+
 class ShopOrbChecks(Toggle):
     """
     Add checks to the store.
@@ -292,6 +296,7 @@ class ShopOrbChecks(Toggle):
     This includes both Blue and Purple Orbs
     """
     display_name = "Orb Checks"
+
 
 class ShopGunChecks(Toggle):
     """
@@ -301,9 +306,10 @@ class ShopGunChecks(Toggle):
     """
     display_name = "Gun Store Checks"
 
+
 class ShopSkillChecks(Toggle):
     """
-    NYI
+    Not yet Implemented, this will do nothing
 
     Purchasing new weapon skills will send out checks
 
@@ -311,40 +317,54 @@ class ShopSkillChecks(Toggle):
     """
     display_name = "NYI Skill Store Checks"
 
+
 class AutoOrbHints(Choice):
     """
     What types of hints should be automatically created
 
     * All will auto hint all orb purchases
-    * Current will only create hints for the available orb checks. I.e Blue Orb #1 when starting a new game
     * None will result in no hints
     """
-    # All?
-    # Only current level?
-    # Only hint all when weapon is obtained?
+    #     * Current will only create hints for the available orb checks. I.e Blue Orb #1 when starting a new game
     display_name = "Auto Orb Hints"
     option_all = 0
-    option_current = 1
-    option_none = 2
+    # option_current = 1
+    option_none = 3
     default = 0
 
-class AutoWeaponHint(OptionSet):
+
+class AutoWeaponHint(Choice):
     option_all = 0
-    option_current = 1
+    # option_current = 1
     option_obtained = 2
     option_none = 3
     default = 0
 
-class GunHints(AutoWeaponHint):
+
+class AutoGunHints(AutoWeaponHint):
     """
     Gun Level Auto hinting behavior
 
     * All: All gun level checks will be auto-hinted
-    * Current: Only the current level for each available gun will be hinted
     * Obtained: Hint all levels when the gun is obtained
     * None: No automatic hinting
     """
-    display_name: "Gun Hints"
+    #   * Current: Only the current level for each available gun will be hinted
+    display_name = "Auto Gun Hints"
+
+
+class AutoSkillHints(AutoWeaponHint):
+    """
+    Not Yet Implemented, this will do nothing
+    Skill Purchase Auto hinting behavior
+
+    * All: All skill checks will be auto-hinted
+    * Obtained: Hint all levels when the relevant weapon is obtained
+    * None: No automatic hinting
+    """
+    #     * Current: Only the current level for each available will be hinted
+    display_name = "Auto Skill Hints"
+
 
 @dataclass
 class DMC3Options(PerGameCommonOptions):
@@ -374,13 +394,18 @@ class DMC3Options(PerGameCommonOptions):
     shop_gun_checks: ShopGunChecks
     shop_skill_checks: ShopSkillChecks
     auto_orb_hints: AutoOrbHints
+    auto_gun_hints: AutoGunHints
+    auto_skill_hints: AutoSkillHints
 
 
 option_groups = [
     OptionGroup("Shop Options", [
         ShopOrbChecks,
+        AutoOrbHints,
         ShopGunChecks,
-        ShopSkillChecks
+        AutoGunHints,
+        ShopSkillChecks,
+        AutoSkillHints
     ]),
     OptionGroup("Mission Options", [
         MissionClearRank,
@@ -406,6 +431,7 @@ dmc3_presets = {
         "purple_orb_mode": False,
         "devil_trigger_mode": True,
         "goal": "standard",
-        "exclude_locations": ["Secret Mission #3", "Secret Mission #6", "Secret Mission #7", "Secret Mission #12"] + [f"Mission #{mission_numb} SS Rank" for mission_numb in range(1, 21)]
+        "exclude_locations": ["Secret Mission #3", "Secret Mission #6", "Secret Mission #7", "Secret Mission #12"] + [
+            f"Mission #{mission_numb} SS Rank" for mission_numb in range(1, 21)]
     }
 }
