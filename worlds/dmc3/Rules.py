@@ -184,11 +184,11 @@ def set_dmc3_rules(dmc3_world) -> None:
         add_mission_order_rules(dmc3_world)
     add_generic_rules(dmc3_world)
     add_mission_complete_rules(dmc3_world)
-    if dmc3_world.options.shop_gun_checks:
-        add_gun_shop_rules(dmc3_world)
+    # if dmc3_world.options.shop_gun_checks:
+    #     add_gun_shop_rules(dmc3_world)
 
     # For allowing SS Checks to have useful or filler
-    if dmc3_world.options.useful_ss_checks:
+    if dmc3_world.options.enabled_ss_rank and dmc3_world.options.useful_ss_checks:
         for i in range(1, 21):
             ss_mission_name = f"Mission #{i} SS Rank"
             if ss_mission_name in dmc3_world.options.exclude_locations.value:
@@ -211,7 +211,7 @@ def set_dmc3_rules(dmc3_world) -> None:
             add_item_rule(dmc3_world.multiworld.get_location(complete_mission_name, dmc3_world.player),
                           lambda item: not item.advancement)
             # If SS Rank checks also require a min. difficulty. Then the same rule applies to them
-            if dmc3_world.options.check_ss_difficulty:
+            if dmc3_world.options.enabled_ss_rank and dmc3_world.options.check_ss_difficulty:
                 ss_mission_name = f"Mission #{i} SS Rank"
                 add_item_rule(dmc3_world.multiworld.get_location(ss_mission_name, dmc3_world.player),
                               lambda item: not item.advancement)

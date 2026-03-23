@@ -80,6 +80,10 @@ weapon_skill_purchases: dict[str, BaseLocationData] = ({
     # TODO
 })
 
+ss_rank_locations: dict[str, BaseLocationData] = (
+    {"Mission #{} SS Rank".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0x00)
+     for mission_numb in range(1,21)})
+
 dmc3_locations: dict[str, BaseLocationData] = ({
     "Mission #2 - Vital Star S": BaseLocationData(mission_number=2, default_item=0x11, room_number=1, offset=0x5C4C50),
 
@@ -243,12 +247,8 @@ dmc3_locations: dict[str, BaseLocationData] = ({
     "Secret Mission #12": BaseLocationData(mission_number=33, room_number=611, secret=True, default_item=0x09),
     # Room 101 M7 Has a gold orb
     # Room 10 M14 Gold Orb
-} |
-                                               {"Mission #{} Complete".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0x00)
-     for mission_numb in range(1,21)} |
-                                               # For SS Ranking missions, excluded by default
-                                               {"Mission #{} SS Rank".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0x00)
-     for mission_numb in range(1,21)} | default_shop_locations|gun_level_purchases|weapon_skill_purchases)
+} |{"Mission #{} Complete".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0x00)
+     for mission_numb in range(1,21)} |ss_rank_locations|default_shop_locations|gun_level_purchases|weapon_skill_purchases)
 
 
 location_name_groups = {

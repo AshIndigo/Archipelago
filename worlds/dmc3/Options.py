@@ -161,6 +161,12 @@ class InitiallyUnlockedDifficulties(OptionSet):
     valid_keys = all_difficulties
     default = frozenset(all_difficulties)
 
+class SSRankEnabled(Toggle):
+    """
+    If the SS Rank checks are added to the multiworld
+    """
+    display_name = "Enable SS Rank Checks"
+
 
 class SSRankGoodies(Toggle):
     """
@@ -304,7 +310,7 @@ class ShopGunChecks(Toggle):
 
     You will need the specific gun for the checks
     """
-    display_name = "Gun Store Checks"
+    display_name = "NYI Gun Store Checks"
 
 
 class ShopSkillChecks(Toggle):
@@ -383,6 +389,7 @@ class DMC3Options(PerGameCommonOptions):
     mission_clear_rank: MissionClearRank
     mission_clear_difficulty: MissionClearDifficulty
     initially_unlocked_difficulties: InitiallyUnlockedDifficulties
+    enabled_ss_rank: SSRankEnabled
     useful_ss_checks: SSRankGoodies
     check_ss_difficulty: SSRankDifficultyCheck
     goal: DMC3Goal
@@ -391,25 +398,26 @@ class DMC3Options(PerGameCommonOptions):
     mission_group: MissionOrderGroup
     exclude_locations: DMC3ExcludeLocations
     shop_orb_checks: ShopOrbChecks
-    shop_gun_checks: ShopGunChecks
-    shop_skill_checks: ShopSkillChecks
+    # shop_gun_checks: ShopGunChecks
+    # shop_skill_checks: ShopSkillChecks
     auto_orb_hints: AutoOrbHints
-    auto_gun_hints: AutoGunHints
-    auto_skill_hints: AutoSkillHints
+    # auto_gun_hints: AutoGunHints
+    # auto_skill_hints: AutoSkillHints
 
 
 option_groups = [
     OptionGroup("Shop Options", [
         ShopOrbChecks,
         AutoOrbHints,
-        ShopGunChecks,
-        AutoGunHints,
-        ShopSkillChecks,
-        AutoSkillHints
+        # ShopGunChecks,
+        # AutoGunHints,
+        # ShopSkillChecks,
+        # AutoSkillHints
     ]),
     OptionGroup("Mission Options", [
         MissionClearRank,
         MissionClearDifficulty,
+        SSRankEnabled,
         SSRankGoodies,
         SSRankDifficultyCheck,
         MissionShuffle,

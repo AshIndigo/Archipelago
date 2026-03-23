@@ -8,14 +8,15 @@ from Utils import Version
 from worlds.AutoWorld import WebWorld, World
 from .Items import item_descriptions, DMC3Item, dmc3_items, ItemData, junk_pool
 from .Locations import location_descriptions, DMC3Location, BaseLocationData, adjudicators, \
-    adjudicator_info, dmc3_locations, location_name_groups, default_shop_locations, gun_level_purchases, Adjudicator
+    adjudicator_info, dmc3_locations, location_name_groups, default_shop_locations, gun_level_purchases, Adjudicator, \
+    weapon_skill_purchases
 from .Options import DMC3Options, option_groups
 from .Regions import dmc3_regions, setup_all_goal, setup_linear_goal
 from .Rules import *
 from .Skills import *
 from ..LauncherComponents import Component, components, launch as launch_component, Type
 
-DEBUG = False
+DEBUG = True
 
 
 class DMC3Settings(settings.Group):
@@ -159,9 +160,6 @@ class DevilMayCry3World(World):
                     self.adjudicator_generated_values = {
                         k: Adjudicator(weapon=v["weapon"], ranking=v["ranking"]) for k, v in value.items()
                     }
-                if key == "shop_checks":
-                    self.options.shop_orb_checks.value = True
-                    self.options.shop_gun_checks.value = True
                 if key == "mission_order":
                     self.dmc3_mission_order = value
                 opt: Optional[Option] = getattr(self.options, key, None)
@@ -222,6 +220,24 @@ class DevilMayCry3World(World):
                     info.ranking = Locations.Ranking(
                         self.random.randrange(Locations.Ranking.C.value, self.options.adjudicator_rankings.value + 1))
 
+        # Auto hint stuff
+        # Looks like these are only made when the slot first connects?
+
+        # Orb purchases
+        if self.options.auto_orb_hints.value == self.options.auto_orb_hints.option_all:
+            for k in default_shop_locations:
+                self.options.start_location_hints.value.add(k)
+
+        # Gun Purchases
+        # if self.options.auto_gun_hints.value == self.options.auto_gun_hints.option_all:
+        #     for k in gun_level_purchases:
+        #         self.options.start_location_hints.value.add(k)
+
+        # Skill Purchases
+        # if self.options.auto_skill_hints.value == self.options.auto_skill_hints.option_all:
+        #     for k in weapon_skill_purchases:
+        #         self.options.start_location_hints.value.add(k)
+
     def create_regions(self) -> None:
         # Menu
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -230,11 +246,11 @@ class DevilMayCry3World(World):
                 m_loc: self.location_name_to_id[m_loc]
                 for m_loc in [loc for loc in default_shop_locations]
             }, DMC3Location)
-        if self.options.shop_gun_checks:
-            menu_region.add_locations({
-                m_loc: self.location_name_to_id[m_loc]
-                for m_loc in [loc for loc in gun_level_purchases]
-            }, DMC3Location)
+        # if self.options.shop_gun_checks:
+        #     menu_region.add_locations({
+        #         m_loc: self.location_name_to_id[m_loc]
+        #         for m_loc in [loc for loc in gun_level_purchases]
+        #     }, DMC3Location)
         self.multiworld.regions.append(menu_region)
         # Setup missions+secret missions
         for mission_idx in range(20):
@@ -246,8 +262,17 @@ class DevilMayCry3World(World):
             current_region = Region(mission_name, self.player, self.multiworld)
             current_region.add_locations({
                 m_loc: self.location_name_to_id[m_loc]
-                for m_loc in [loc for loc in dmc3_locations if dmc3_locations[loc].mission_number == mission]
+                for m_loc in [loc for loc in dmc3_locations if dmc3_locations[loc].mission_number == mission
+                              and "SS Rank" not in loc]
             }, DMC3Location)
+
+            # This could be better
+            if self.options.enabled_ss_rank:
+                current_region.add_locations({
+                    m_loc: self.location_name_to_id[m_loc]
+                    for m_loc in [loc for loc in dmc3_locations if dmc3_locations[loc].mission_number == mission
+                                  and "SS Rank" in loc]
+                }, DMC3Location)
 
             # current_region.add_event(f"Finish Mission #{mission}", None, lambda state, mi=mission: state.can_reach_location(f"Mission #{mi} Complete", self.player), DMC3Location, DMC3Item)
 
@@ -372,9 +397,9 @@ class DevilMayCry3World(World):
                                          "randomize_skills", "randomize_gun_levels", "randomize_styles",
                                          "purple_orb_mode",
                                          "devil_trigger_mode", "goal", "mission_clear_rank", "mission_clear_difficulty",
-                                         "initially_unlocked_difficulties", "check_ss_difficulty",
-                                         "shop_orb_checks", "shop_gun_checks", "shop_skill_checks",
-                                         "auto_orb_hints", "auto_gun_hints", "auto_skill_hints",
+                                         "initially_unlocked_difficulties", "enabled_ss_rank", "check_ss_difficulty",
+                                         "shop_orb_checks", #"shop_gun_checks", "shop_skill_checks",
+                                         "auto_orb_hints", #"auto_gun_hints", "auto_skill_hints",
                                                                               "death_link", toggles_as_bools=True))
         return data
 
