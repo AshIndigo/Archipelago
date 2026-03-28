@@ -21,16 +21,16 @@ class DMC3CommandProcessor(ClientCommandProcessor):
             else:
                 logger.info(f"DMC3 Status: Connected")
 
-    def _cmd_floors_needed(self, new_floor: int):
-        """Change how many BP floors are required to generate a hint Range: (1 to 10,000)"""
-        if 0 < new_floor <= 10000:
-            print(f"Floors needed is now {new_floor}")
-            from . import DevilMayCry3World
-            # TODO Saving new FPH isn't working
-            DevilMayCry3World.settings.floors_per_hint = DevilMayCry3World.settings.FloorsPerHint(new_floor)
-            self.ctx.on_package("Bounced", {"cmd": "Bounced", "data": {"floors_per_hint": new_floor}})
-        else:
-            pass
+    # def _cmd_floors_needed(self, new_floor: int):
+    #     """Change how many BP floors are required to generate a hint Range: (1 to 10,000)"""
+    #     if 0 < new_floor <= 10000:
+    #         print(f"Floors needed is now {new_floor}")
+    #         from . import DevilMayCry3World
+    #         # TODO Saving new FPH isn't working
+    #         DevilMayCry3World.settings.floors_per_hint = DevilMayCry3World.settings.FloorsPerHint(new_floor)
+    #         self.ctx.on_package("Bounced", {"cmd": "Bounced", "data": {"floors_per_hint": new_floor}})
+    #     else:
+    #         pass
 
 
 class DMC3Context(CommonContext):

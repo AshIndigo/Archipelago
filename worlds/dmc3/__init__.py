@@ -23,7 +23,7 @@ class DMC3Settings(settings.Group):
     class FloorsPerHint(int):
         """Amount of BP floors needed to generate a hint"""
 
-    floors_per_hint: FloorsPerHint = FloorsPerHint(50)
+    floors_per_hint: FloorsPerHint = FloorsPerHint(200)
 
 
 def launch_client(*args: str):
