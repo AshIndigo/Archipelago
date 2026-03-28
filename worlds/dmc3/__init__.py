@@ -16,7 +16,7 @@ from .Rules import *
 from .Skills import *
 from ..LauncherComponents import Component, components, launch as launch_component, Type
 
-DEBUG = True
+DEBUG = False
 
 
 class DMC3Settings(settings.Group):
