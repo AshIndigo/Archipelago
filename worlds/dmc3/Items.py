@@ -24,6 +24,7 @@ item_name_groups = {
 class ItemData:
     code: int
     classification: ItemClassification
+    copies: int = 1
 
 
 dmc3_items: dict[str, ItemData] = {

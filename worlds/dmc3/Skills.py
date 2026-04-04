@@ -5,7 +5,7 @@ from .Items import item_name_groups, ItemData
 weapon_skills: dict[str, ItemData] = {
     # Rebellion
     "Rebellion - Progressive Stinger": ItemData(  # Stinger Level 1
-        0x40, ItemClassification.useful),
+        0x40, ItemClassification.useful, 2),
     # "Rebellion - Stinger Level 2": ItemData(
     #     0x41, ItemClassification.useful),
     "Rebellion - Drive": ItemData(
@@ -21,7 +21,7 @@ weapon_skills: dict[str, ItemData] = {
 
     # Agni and Rudra
     "Agni and Rudra - Progressive Jet Stream": ItemData(  # Jet Stream Level 2
-        0x46, ItemClassification.useful),
+        0x46, ItemClassification.useful, 2),
     # "Agni and Rudra - Jet Stream Level 3": ItemData(
     #     0x47, ItemClassification.useful),
     "Agni and Rudra - Whirlwind": ItemData(
@@ -31,7 +31,7 @@ weapon_skills: dict[str, ItemData] = {
 
     # Nevan
     "Nevan - Progressive Reverb Shock": ItemData(
-        0x4A, ItemClassification.useful),
+        0x4A, ItemClassification.useful, 2),
     # "Nevan - Reverb Shock Level 2": ItemData(
     #     0x4B, ItemClassification.useful),
     "Nevan - Bat Rift Level 2": ItemData(
@@ -47,7 +47,7 @@ weapon_skills: dict[str, ItemData] = {
         0x4F, ItemClassification.useful),
     # Progression
     "Beowulf - Progressive Uppercut": ItemData( # Beowulf - Beast Uppercut
-        0x50, ItemClassification.useful),
+        0x50, ItemClassification.useful, 2),
     # "Beowulf - Rising Dragon": ItemData(
     #     0x51, ItemClassification.useful),
     "Beowulf - Air Hike": ItemData(

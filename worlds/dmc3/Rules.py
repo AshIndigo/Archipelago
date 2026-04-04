@@ -7,7 +7,8 @@ def has_air_hike(state, world) -> bool:
         if state.has(melee, world.player):
             # If rando skills isn't on, it'll have to be bought. Otherwise, check to see if the weapon has air hike unlocked
             if world.options.randomize_skills:
-                return state.has(f"{melee} - Air Hike", world.player)
+                if state.has(f"{melee} - Air Hike", world.player):
+                    return True
             else:
                 return True
 
