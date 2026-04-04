@@ -9,6 +9,7 @@ item_descriptions = {
 
 item_name_groups = {
     "melees": ["Rebellion", "Cerberus", "Agni and Rudra", "Nevan", "Beowulf"],
+    "melees_vergil": ["Yamato", "Force Edge", "Beowulf (Vergil)"],
     "guns": ["Ebony & Ivory", "Shotgun", "Artemis", "Spiral", "Kalina Ann"],
     "essences": ["Essence of Fighting", "Essence of Technique", "Essence of Intelligence"],
     "fragments": ["Orihalcon Fragment (Right)", "Orihalcon Fragment (Left)", "Orihalcon Fragment (Bottom)"],
@@ -16,7 +17,10 @@ item_name_groups = {
                   "Beowulf - Air Hike"],
     "air_hike_capable": ["Rebellion", "Agni and Rudra", "Beowulf"],
     "styles": ["Progressive Trickster", "Progressive Swordmaster", "Progressive Gunslinger", "Progressive Royalguard"],
-    "upgradable_skills": ["Rebellion - Progressive Stinger", "Agni and Rudra - Progressive Jet Stream", "Nevan - Progressive Reverb Shock", "Beowulf - Progressive Uppercut"]
+    "upgradable_skills": ["Rebellion - Progressive Stinger", "Agni and Rudra - Progressive Jet Stream",
+                          "Nevan - Progressive Reverb Shock", "Beowulf - Progressive Uppercut"],
+    "upgradable_skills_vergil": ["Yamato - Progressive Rapid Slash", "Yamato - Progressive Judgement Cut",
+                          "Force Edge - Progressive Stinger"]
 }
 
 
@@ -25,7 +29,7 @@ class ItemData:
     code: int
     classification: ItemClassification
 
-
+# Player Independent Items
 dmc3_items: dict[str, ItemData] = {
     # Orbs
     "1000 Red Orbs": ItemData(0x01, ItemClassification.filler),
@@ -41,25 +45,6 @@ dmc3_items: dict[str, ItemData] = {
     "Vital Star S": ItemData(0x11, ItemClassification.filler),
     "Devil Star": ItemData(0x12, ItemClassification.filler),
     "Holy Water": ItemData(0x13, ItemClassification.filler),
-
-    # Melee
-    "Rebellion": ItemData(0x16, ItemClassification.progression), # Non-awakened Rebellion
-    "Cerberus": ItemData(0x17, ItemClassification.progression),
-    "Agni and Rudra": ItemData(0x18, ItemClassification.progression),
-    "Devil Trigger": ItemData(0x19, ItemClassification.progression), # Awakened Rebellion
-    "Nevan": ItemData(0x1A, ItemClassification.progression),
-    "Beowulf": ItemData(0x1B, ItemClassification.progression),
-
-    # Guns
-    "Ebony & Ivory": ItemData(0x1C, ItemClassification.progression),
-    "Shotgun": ItemData(0x1D, ItemClassification.progression),
-    "Artemis": ItemData(0x1E, ItemClassification.progression),
-    "Spiral": ItemData(0x1F, ItemClassification.progression),
-    "Kalina Ann": ItemData(0x21, ItemClassification.progression),
-
-    # Styles
-    "Quicksilver Style": ItemData(0x22, ItemClassification.useful),
-    "Doppelganger Style": ItemData(0x23, ItemClassification.useful),
 
     # Key items
     "Astronomical Board": ItemData(0x24, ItemClassification.progression),
@@ -86,6 +71,33 @@ dmc3_items: dict[str, ItemData] = {
     "Samsara": ItemData(0x39, ItemClassification.progression),
 
     #"Remote": ItemData(0x26, ItemClassification.progression),
+}
+
+dante_items = {
+    # Melee
+    "Rebellion": ItemData(0x16, ItemClassification.progression),  # Non-awakened Rebellion
+    "Cerberus": ItemData(0x17, ItemClassification.progression),
+    "Agni and Rudra": ItemData(0x18, ItemClassification.progression),
+    "Devil Trigger": ItemData(0x19, ItemClassification.progression),  # Awakened Rebellion
+    "Nevan": ItemData(0x1A, ItemClassification.progression),
+    "Beowulf": ItemData(0x1B, ItemClassification.progression),
+
+    # Guns
+    "Ebony & Ivory": ItemData(0x1C, ItemClassification.progression),
+    "Shotgun": ItemData(0x1D, ItemClassification.progression),
+    "Artemis": ItemData(0x1E, ItemClassification.progression),
+    "Spiral": ItemData(0x1F, ItemClassification.progression),
+    "Kalina Ann": ItemData(0x21, ItemClassification.progression),
+
+    # Styles
+    "Quicksilver Style": ItemData(0x22, ItemClassification.useful),
+    "Doppelganger Style": ItemData(0x23, ItemClassification.useful),
+}
+
+vergil_items = {
+    "Yamato": ItemData(0x70, ItemClassification.progression),
+    "Force Edge": ItemData(0x71, ItemClassification.progression),
+    "Beowulf (Vergil)": ItemData(0x72, ItemClassification.progression),
 }
 
 key_items: list[str] = [

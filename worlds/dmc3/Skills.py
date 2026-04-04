@@ -2,7 +2,7 @@ from BaseClasses import ItemClassification
 from .Items import item_name_groups, ItemData
 
 # We are going to treat everything >=0x40 as skills
-weapon_skills: dict[str, ItemData] = {
+weapon_skills_dante: dict[str, ItemData] = {
     # Rebellion
     "Rebellion - Progressive Stinger": ItemData(  # Stinger Level 1
         0x40, ItemClassification.useful),
@@ -46,7 +46,7 @@ weapon_skills: dict[str, ItemData] = {
     "Beowulf - Straight Level 2": ItemData(
         0x4F, ItemClassification.useful),
     # Progression
-    "Beowulf - Progressive Uppercut": ItemData( # Beowulf - Beast Uppercut
+    "Beowulf - Progressive Uppercut": ItemData(  # Beowulf - Beast Uppercut
         0x50, ItemClassification.useful),
     # "Beowulf - Rising Dragon": ItemData(
     #     0x51, ItemClassification.useful),
@@ -54,7 +54,7 @@ weapon_skills: dict[str, ItemData] = {
         0x52, ItemClassification.progression),
 }
 
-gun_levels = {
+gun_levels_dante = {
     "Ebony & Ivory Progressive Upgrade": ItemData(0x53, ItemClassification.useful),
     "Shotgun Progressive Upgrade": ItemData(0x54, ItemClassification.useful),
     "Artemis Progressive Upgrade": ItemData(0x55, ItemClassification.useful),
@@ -62,22 +62,32 @@ gun_levels = {
     "Kalina Ann Progressive Upgrade": ItemData(0x57, ItemClassification.useful),
 }
 
-styles = {
+styles_dante = {
     "Progressive Trickster": ItemData(0x60, ItemClassification.progression),
     "Progressive Swordmaster": ItemData(0x61, ItemClassification.useful),
     "Progressive Gunslinger": ItemData(0x62, ItemClassification.useful),
     "Progressive Royalguard": ItemData(0x63, ItemClassification.useful),
 }
 
-skills_dict: dict[str, list[ItemData]] = {
-    item: [skill for name, skill in weapon_skills.items() if name.startswith(item)]
-    for item in item_name_groups["melees"]
+gun_levels_vergil = {
+    "Summoned Swords Progressive Upgrade": ItemData(0x73, ItemClassification.useful),
+    "Spiral Swords": ItemData(0x75, ItemClassification.useful)
 }
 
-gun_levels_dict: dict[str, list[ItemData]] = {
-    item: [skill for name, skill in weapon_skills.items() if name.startswith(item)]
-    for item in item_name_groups["guns"]
+styles_vergil = {"Progressive Darkslayer": ItemData(0x75, ItemClassification.progression)}
+
+weapon_skills_vergil = {
+    # Yamato
+    "Yamato - Progressive Rapid Slash": ItemData(0x76, ItemClassification.useful),
+    "Yamato - Progressive Judgement Cut": ItemData(0x78, ItemClassification.useful),
+    # Beowulf
+    "Beowulf - Starfall Level 2": ItemData(0x7A, ItemClassification.useful),
+    "Beowulf - Rising Sun": ItemData(0x7B, ItemClassification.useful),
+    "Beowulf - Lunar Phase Level 2": ItemData(0x7C, ItemClassification.useful),
+    # Force Edge
+    "Force Edge - Helm Breaker Level 2": ItemData(0x7D, ItemClassification.useful),
+    "Force Edge - Progressive Stinger": ItemData(0x7E, ItemClassification.useful),
+    "Force Edge - Round Trip": ItemData(0x80, ItemClassification.useful),
 }
 
-combined_upgrades = weapon_skills | gun_levels
-skill_upgrades: dict[str, list[ItemData]] = skills_dict | gun_levels_dict
+combined_upgrades = weapon_skills_dante | gun_levels_dante | weapon_skills_vergil | gun_levels_vergil

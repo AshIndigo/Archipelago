@@ -88,7 +88,7 @@ class RandomizeGunLevels(Toggle):
 
 
 class RandomizeStyles(Toggle):
-    """Add Dante's styles into the world as progressive upgrades. The starting style will be chosen at random unless one is specified via start inventory"""
+    """Add Dante's or Vergil's styles into the world as progressive upgrades. The starting style will be chosen at random unless one is specified via start inventory"""
     display_name = "Randomize Styles"
 
 
@@ -160,6 +160,7 @@ class InitiallyUnlockedDifficulties(OptionSet):
     all_difficulties = ["Easy", "Hard", "Very Hard", "Dante Must Die", "Heaven or Hell"]
     valid_keys = all_difficulties
     default = frozenset(all_difficulties)
+
 
 class SSRankEnabled(Toggle):
     """
@@ -372,6 +373,22 @@ class AutoSkillHints(AutoWeaponHint):
     display_name = "Auto Skill Hints"
 
 
+class CharacterSelection(Choice):
+    """
+    Which character do you wish to play as?
+    """
+    display_name = "Character Selection"
+    option_dante = 0
+    option_vergil = 3
+
+class StartMeleeVergil(Choice):
+    """Set your starting melee weapon for Vergil"""
+    display_name = "Starting Melee (Vergil)"
+    option_yamato = 0
+    option_force_edge = 1
+    option_beowulf = 2
+    default = 0
+
 @dataclass
 class DMC3Options(PerGameCommonOptions):
     random_adjudicators: RandomizeAdjudicators
@@ -403,9 +420,20 @@ class DMC3Options(PerGameCommonOptions):
     auto_orb_hints: AutoOrbHints
     # auto_gun_hints: AutoGunHints
     # auto_skill_hints: AutoSkillHints
+    character_selection: CharacterSelection
+    start_melee_vergil: StartMeleeVergil
 
 
 option_groups = [
+    OptionGroup("Dante Options", [
+        StartMelee,
+        StartSecondMelee,
+        StartGun,
+        StartSecondGun
+    ]),
+    OptionGroup("Vergil Options", [
+        StartMeleeVergil,
+    ]),
     OptionGroup("Shop Options", [
         ShopOrbChecks,
         AutoOrbHints,

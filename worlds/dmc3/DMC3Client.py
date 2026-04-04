@@ -8,9 +8,8 @@ import Utils
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from MultiServer import Endpoint
 from NetUtils import decode, encode, NetworkItem
-from . import styles
+from .Utils import item_name_to_id
 from .Items import key_items, dmc3_items
-from .Skills import combined_upgrades
 
 DEBUG = False
 
@@ -38,8 +37,7 @@ class DMC3CommandProcessor(ClientCommandProcessor):
 class DMC3Context(CommonContext):
     command_processor = DMC3CommandProcessor
     game = "Devil May Cry 3"
-    item_name_to_id = {name: data.code for name, data in (dmc3_items | combined_upgrades | styles).items() if
-                       data.code is not None}
+    item_name_to_id = item_name_to_id
     item_id_to_name = {code: name for name, code in item_name_to_id.items()}
 
     def __init__(self, server_address, password):

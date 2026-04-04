@@ -44,6 +44,23 @@ def has_devil_trigger(state, world) -> bool:
                                                                             world.player))
     return dt and orbs
 
+def can_do_sm6(state, world) -> bool:
+    if state.has("Stone Mask", world.player):
+        if world.options.character_selection == world.options.character_selection.option_dante:
+            return has_air_raid(state, world) and has_devil_trigger(state, world)
+        elif world.options.character_selection == world.options.character_selection.option_vergil:
+            if world.options.randomize_skills:
+                return state.has("Progressive Darkslayer", world.player, count=2)
+            else:
+                return True
+    return False
+
+def can_do_m9_bfrag(state, world) -> bool:
+    if world.options.character_selection == world.options.character_selection.option_dante:
+        return has_air_hike(state, world) and has_sky_star(state, world)
+    elif world.options.character_selection == world.options.character_selection.option_vergil:
+        return state.has("Yamato", world.player)
+    return False
 
 def all_missions_complete(state, world) -> bool:
     for idx in range(1, 21):
@@ -70,7 +87,7 @@ def add_generic_rules(world):
              lambda state: state.has("Soul of Steel", world.player))
 
     add_rule(world.multiworld.get_location("Mission #9 - Blue Orb Fragment #5", world.player),
-             lambda state: has_air_hike(state, world) and has_sky_star(state, world))
+             lambda state: can_do_m9_bfrag(state, world))
 
     # Extra insurance, even if it may be un-needed. Both locations are in the same room.
     add_rule(world.multiworld.get_location("Mission #14 - Combat Adjudicator #9", world.player),
@@ -115,10 +132,9 @@ def add_generic_rules(world):
     add_rule(world.multiworld.get_location("Secret Mission #2", world.player),
              lambda state: state.has("Soul of Steel", world.player))
 
-    # Flight of the Demon, needs air raid and DT (Needs Stone Mask to raise bridge leading to it)
+    # Flight of the Demon, needs air raid and DT (Needs Stone Mask to raise bridge leading to it). In Vergil's case needs DS Lv2
     add_rule(world.multiworld.get_location("Secret Mission #6", world.player),
-             lambda state: has_air_raid(state, world) and
-                           has_devil_trigger(state, world) and state.has("Stone Mask", world.player))
+             lambda state: can_do_sm6(state, world))
 
 
 # What location needs to be reached/items are needed to finish a mission
