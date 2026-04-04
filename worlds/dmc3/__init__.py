@@ -197,7 +197,10 @@ class DevilMayCry3World(World):
                                                                                       "generation_is_fake"):
             match self.options.mission_shuffle.value:
                 case self.options.mission_shuffle.option_rng:
-                    self.random.shuffle(self.dmc3_mission_order)
+                    m_order = [i for i in range(1, 20)]
+                    self.random.shuffle(m_order)
+                    m_order.append(20)
+                    self.dmc3_mission_order = m_order
                 case self.options.mission_shuffle.option_grouped:
                     self.grouped_mission_order()
                 case self.options.mission_shuffle.option_weighted:
@@ -300,9 +303,9 @@ class DevilMayCry3World(World):
                     self.multiworld.regions.append(secret_region)
                     secret_region.add_exits(["Menu", mission_name])
 
-    def create_item(self, item: str) -> DMC3Item:
-        item = DMC3Item(item, (dmc3_items | combined_upgrades | styles)[item].classification,
-                        self.item_name_to_id[item],
+    def create_item(self, name: str) -> DMC3Item:
+        item = DMC3Item(name, (dmc3_items | combined_upgrades | styles)[name].classification,
+                        self.item_name_to_id[name],
                         self.player)
         return item
 
