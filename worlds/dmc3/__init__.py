@@ -409,11 +409,8 @@ class DevilMayCry3World(World):
             # Skill+Gun level handling
             if self.options.randomize_skills:
                 # Adds all skills to the pool
-                for skill in map(self.create_item, weapon_skills_dante):
-                    initial_item_pool.append(skill)
-                # Progressive skills need a second copy to reach max level
-                for skill in map(self.create_item, self.item_name_groups["upgradable_skills"]):
-                    initial_item_pool.append(skill)
+                for skill, data in weapon_skills_dante.items():
+                    initial_item_pool.extend([self.create_item(skill) for _ in range(data.copies)])
             if self.options.randomize_gun_levels:
                 for gun, _ in gun_levels_dante.items():
                     # All guns go up to level 3, starting at 1
@@ -431,11 +428,8 @@ class DevilMayCry3World(World):
         # Skill+Gun level handling
         if self.options.randomize_skills:
             # Adds all skills to the pool
-            for skill in map(self.create_item, weapon_skills_vergil):
-                initial_item_pool.append(skill)
-            # Progressive skills need a second copy to reach max level
-            for skill in map(self.create_item, self.item_name_groups["upgradable_skills_vergil"]):
-                initial_item_pool.append(skill)
+            for skill, data in weapon_skills_vergil.items():
+                initial_item_pool.extend([self.create_item(skill) for _ in range(data.copies)])
         if self.options.randomize_gun_levels:
                 # All guns go up to level 3, starting at 1
                 initial_item_pool.extend([self.create_item("Summoned Swords Progressive Upgrade") for _ in range(2)])

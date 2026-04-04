@@ -28,6 +28,7 @@ item_name_groups = {
 class ItemData:
     code: int
     classification: ItemClassification
+    copies: int = 1
 
 # Player Independent Items
 dmc3_items: dict[str, ItemData] = {

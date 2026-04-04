@@ -5,7 +5,7 @@ from .Items import item_name_groups, ItemData
 weapon_skills_dante: dict[str, ItemData] = {
     # Rebellion
     "Rebellion - Progressive Stinger": ItemData(  # Stinger Level 1
-        0x40, ItemClassification.useful),
+        0x40, ItemClassification.useful, 2),
     # "Rebellion - Stinger Level 2": ItemData(
     #     0x41, ItemClassification.useful),
     "Rebellion - Drive": ItemData(
@@ -21,7 +21,7 @@ weapon_skills_dante: dict[str, ItemData] = {
 
     # Agni and Rudra
     "Agni and Rudra - Progressive Jet Stream": ItemData(  # Jet Stream Level 2
-        0x46, ItemClassification.useful),
+        0x46, ItemClassification.useful, 2),
     # "Agni and Rudra - Jet Stream Level 3": ItemData(
     #     0x47, ItemClassification.useful),
     "Agni and Rudra - Whirlwind": ItemData(
@@ -31,7 +31,7 @@ weapon_skills_dante: dict[str, ItemData] = {
 
     # Nevan
     "Nevan - Progressive Reverb Shock": ItemData(
-        0x4A, ItemClassification.useful),
+        0x4A, ItemClassification.useful, 2),
     # "Nevan - Reverb Shock Level 2": ItemData(
     #     0x4B, ItemClassification.useful),
     "Nevan - Bat Rift Level 2": ItemData(
@@ -47,7 +47,7 @@ weapon_skills_dante: dict[str, ItemData] = {
         0x4F, ItemClassification.useful),
     # Progression
     "Beowulf - Progressive Uppercut": ItemData(  # Beowulf - Beast Uppercut
-        0x50, ItemClassification.useful),
+        0x50, ItemClassification.useful, 2),
     # "Beowulf - Rising Dragon": ItemData(
     #     0x51, ItemClassification.useful),
     "Beowulf - Air Hike": ItemData(
@@ -78,15 +78,15 @@ styles_vergil = {"Progressive Darkslayer": ItemData(0x75, ItemClassification.pro
 
 weapon_skills_vergil = {
     # Yamato
-    "Yamato - Progressive Rapid Slash": ItemData(0x76, ItemClassification.useful),
-    "Yamato - Progressive Judgement Cut": ItemData(0x78, ItemClassification.useful),
+    "Yamato - Progressive Rapid Slash": ItemData(0x76, ItemClassification.useful, 2),
+    "Yamato - Progressive Judgement Cut": ItemData(0x78, ItemClassification.useful, 2),
     # Beowulf
     "Beowulf - Starfall Level 2": ItemData(0x7A, ItemClassification.useful),
     "Beowulf - Rising Sun": ItemData(0x7B, ItemClassification.useful),
     "Beowulf - Lunar Phase Level 2": ItemData(0x7C, ItemClassification.useful),
     # Force Edge
     "Force Edge - Helm Breaker Level 2": ItemData(0x7D, ItemClassification.useful),
-    "Force Edge - Progressive Stinger": ItemData(0x7E, ItemClassification.useful),
+    "Force Edge - Progressive Stinger": ItemData(0x7E, ItemClassification.useful, 2),
     "Force Edge - Round Trip": ItemData(0x80, ItemClassification.useful),
 }
 
