@@ -178,7 +178,10 @@ class DevilMayCry3World(World):
                                                                                       "generation_is_fake"):
             match self.options.mission_shuffle.value:
                 case self.options.mission_shuffle.option_rng:
-                    self.random.shuffle(self.dmc3_mission_order)
+                    m_order = [i for i in range(1, 20)]
+                    self.random.shuffle(m_order)
+                    m_order.append(20)
+                    self.dmc3_mission_order = m_order
                 case self.options.mission_shuffle.option_grouped:
                     self.grouped_mission_order()
                 case self.options.mission_shuffle.option_weighted:
