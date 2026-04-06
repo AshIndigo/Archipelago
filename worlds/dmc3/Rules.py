@@ -62,6 +62,12 @@ def add_mission_order_rules(world):
                                           world.player),
             lambda state, i=mission_idx: state.can_reach_location(f"Mission #{i} Complete", world.player)
         )
+        world.multiworld.register_indirect_condition(
+            world.multiworld.get_region(f"Mission #{mission_idx}", world.player),
+            world.multiworld.get_entrance(
+                f"Mission #{mission_idx} -> Mission #{world.dmc3_mission_order[idx + 1]}",
+                world.player)
+            )
 
 
 # Generic Location rules, independent of goal
@@ -176,9 +182,10 @@ def add_mission_complete_rules(world):
 def add_gun_shop_rules(world):
     for gun in world.item_name_groups["guns"]:
         add_rule(world.multiworld.get_location(f"Purchase {gun} Level 2", world.player),
-                  lambda state, gun_name=gun: state.has(gun_name, world.player))
+                 lambda state, gun_name=gun: state.has(gun_name, world.player))
         add_rule(world.multiworld.get_location(f"Purchase {gun} Level 3", world.player),
-                  lambda state, gun_name=gun: state.has(gun_name, world.player))
+                 lambda state, gun_name=gun: state.has(gun_name, world.player))
+
 
 def set_dmc3_rules(dmc3_world) -> None:
     if dmc3_world.options.goal.value != 1:

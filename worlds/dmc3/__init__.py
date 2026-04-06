@@ -78,7 +78,7 @@ def get_weapon_name_from_option(val) -> str:
         8: "Spiral",
         9: "Kalina Ann",
         255: "None",
-    }.get(val)
+    }.get(val, "None")
 
 
 class DevilMayCry3World(World):
@@ -93,8 +93,6 @@ class DevilMayCry3World(World):
     web = DevilMayCry3Web()
     settings: ClassVar[DMC3Settings]
     base_id = 1
-    adjudicator_generated_values = adjudicator_info.copy()
-    dmc3_mission_order = [i for i in range(1, 21)]
 
     item_name_to_id = {name: data.code for name, data in (dmc3_items | combined_upgrades | styles).items() if
                        data.code is not None}
@@ -105,6 +103,11 @@ class DevilMayCry3World(World):
     location_name_groups = location_name_groups
     set_rules = Rules.set_dmc3_rules
     ut_can_gen_without_yaml = True
+
+    def __init__(self, world, player: int):
+        super(DevilMayCry3World, self).__init__(world, player)
+        self.dmc3_mission_order = [i for i in range(1, 21)]
+        self.adjudicator_generated_values = adjudicator_info.copy()
 
     def grouped_mission_order(self):
         size = -(-20 // self.options.mission_group.value)
@@ -142,9 +145,6 @@ class DevilMayCry3World(World):
         # Ensure Mission 20 is always last because of unfixed bug
         result.append(20)
         self.dmc3_mission_order = result
-
-    def __init__(self, world, player: int):
-        super(DevilMayCry3World, self).__init__(world, player)
 
     def generate_early(self) -> None:
         # Universal Tracker stuff
@@ -209,7 +209,7 @@ class DevilMayCry3World(World):
             print(f"Mission Order: {self.dmc3_mission_order}")
         # If a style isn't already in the start inventory, pick one at random
         if self.options.randomize_styles:
-            if item_name_groups["styles"] & self.options.start_inventory.keys():
+            if styles.keys() & self.options.start_inventory.keys():
                 pass
             else:
                 self.push_precollected(self.create_item(self.random.choice(item_name_groups["styles"])))
