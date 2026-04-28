@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from .Items import item_name_groups, ItemData
+from .Items import ItemData
 
 # We are going to treat everything >=0x40 as skills
 weapon_skills: dict[str, ItemData] = {
@@ -69,15 +69,4 @@ styles = {
     "Progressive Royalguard": ItemData(0x63, ItemClassification.useful),
 }
 
-skills_dict: dict[str, list[ItemData]] = {
-    item: [skill for name, skill in weapon_skills.items() if name.startswith(item)]
-    for item in item_name_groups["melees"]
-}
-
-gun_levels_dict: dict[str, list[ItemData]] = {
-    item: [skill for name, skill in weapon_skills.items() if name.startswith(item)]
-    for item in item_name_groups["guns"]
-}
-
 combined_upgrades = weapon_skills | gun_levels
-skill_upgrades: dict[str, list[ItemData]] = skills_dict | gun_levels_dict

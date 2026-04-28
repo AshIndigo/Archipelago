@@ -1,3 +1,4 @@
+from BaseClasses import MultiWorld
 from ..dmc3 import adjudicators
 from ..generic.Rules import add_rule, add_item_rule
 
@@ -95,6 +96,10 @@ def add_generic_rules(world):
     add_rule(world.multiworld.get_location("Mission #5 - Agni and Rudra", world.player),
              lambda state: state.has("Soul of Steel", world.player))
 
+    # Adjudicator is right outside the door you blast open with the laser
+    add_rule(world.multiworld.get_location("Mission #6 - Combat Adjudicator #3", world.player),
+             lambda state: state.has_group_unique("essences", world.player, 2))
+
     # Needed to dispel the flames blocking the door to this room
     add_rule(world.multiworld.get_location("Mission #7 - Crystal Skull", world.player),
              lambda state: state.has("Siren's Shriek", world.player) and state.has("Orihalcon Fragment", world.player))
@@ -114,9 +119,13 @@ def add_generic_rules(world):
     add_rule(world.multiworld.get_location("Mission #16 - Kalina Ann", world.player),
              lambda state: state.has("Golden Sun", world.player) and state.has("Onyx Moonshard", world.player))
 
+    # Past the door that needs those two key items
+    add_rule(world.multiworld.get_location("Mission #16 - Vital Star S", world.player),
+             lambda state: state.has("Golden Sun", world.player) and state.has("Onyx Moonshard", world.player))
+
     # Statue needs all 3 essences to lower down artemis
     add_rule(world.multiworld.get_location("Mission #6 - Artemis", world.player),
-             lambda state: state.count_group("essences", world.player) == 3)
+             lambda state: state.has_group_unique("essences", world.player, 3))
 
     # Need Soul of Steel to cross the pit and open the door
     add_rule(world.multiworld.get_location("Secret Mission #2", world.player),
@@ -136,7 +145,7 @@ def add_mission_complete_rules(world):
 
     # Statue laser needs 2 essences
     add_rule(world.multiworld.get_location("Mission #6 Complete", world.player),
-             lambda state: state.count_group("essences", world.player) >= 2)
+             lambda state: state.has_group_unique("essences", world.player, 2))
 
     # Opens the door leading to Vergil's Arena
     add_rule(world.multiworld.get_location("Mission #7 Complete", world.player),
@@ -168,7 +177,7 @@ def add_mission_complete_rules(world):
 
     # Elevator needs all 3 fragments
     add_rule(world.multiworld.get_location("Mission #15 Complete", world.player),
-             lambda state: state.count_group("fragments", world.player) == 3)
+             lambda state: state.has_group_unique("fragments", world.player, 3))
 
     # Door needs both to be slotted in
     add_rule(world.multiworld.get_location("Mission #16 Complete", world.player),

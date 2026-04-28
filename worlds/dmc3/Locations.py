@@ -250,6 +250,13 @@ dmc3_locations: dict[str, BaseLocationData] = ({
 } |{"Mission #{} Complete".format(mission_numb): BaseLocationData(mission_number=mission_numb, room_number=0, default_item=0x00)
      for mission_numb in range(1,21)} |ss_rank_locations|default_shop_locations|gun_level_purchases|weapon_skill_purchases)
 
+# Dang rng
+ordered_locations = dict(
+    sorted(
+        dmc3_locations.items(),
+        key=lambda x: (x[1].mission_number, x[0])
+    )
+)
 
 location_name_groups = {
     f"Mission #{numb}": [location for location, data in dmc3_locations.items() if data.mission_number == numb] for numb in range(1,21)
@@ -263,4 +270,11 @@ class DMC3Location(Location):
         self.event = code is None
 
 
-adjudicators = [key for (key, val) in dmc3_locations.items() if val.adjudicator == True]
+adjudicators = [
+    key
+    for key, val in sorted(
+        ordered_locations.items(),
+        key=lambda x: (x[1].mission_number, x[0])
+    )
+    if val.adjudicator
+]

@@ -89,6 +89,13 @@ dmc3_items: dict[str, ItemData] = {
     #"Remote": ItemData(0x26, ItemClassification.progression),
 }
 
+ordered_items = dict(
+    sorted(
+        dmc3_items.items(),
+        key=lambda x: x[0]  # or a custom key if ItemData has fields
+    )
+)
+
 key_items: list[str] = [
     "Astronomical Board", "Vajura", "Soul of Steel", "Essence of Fighting", "Essence of Technique",
     "Essence of Intelligence",
@@ -98,6 +105,9 @@ key_items: list[str] = [
     "Onyx Moonshard", "Samsara"
 
 ]
+
+melees = sorted(["Rebellion", "Cerberus", "Agni and Rudra", "Nevan", "Beowulf"])
+styles = sorted(["Progressive Trickster", "Progressive Swordmaster", "Progressive Gunslinger", "Progressive Royalguard"])
 
 junk_pool: dict[str, int] = {
     "Vital Star S": 5,
