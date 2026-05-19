@@ -234,9 +234,9 @@ class DevilMayCry3World(World):
                 self.options.start_location_hints.value.add(k)
 
         # Gun Purchases
-        # if self.options.auto_gun_hints.value == self.options.auto_gun_hints.option_all:
-        #     for k in gun_level_purchases:
-        #         self.options.start_location_hints.value.add(k)
+        if self.options.auto_gun_hints.value == self.options.auto_gun_hints.option_all:
+            for k in gun_level_purchases:
+                self.options.start_location_hints.value.add(k)
 
         # Skill Purchases
         # if self.options.auto_skill_hints.value == self.options.auto_skill_hints.option_all:
@@ -395,7 +395,8 @@ class DevilMayCry3World(World):
             data.update({'adjudicators': {key: asdict(adj) for key, adj in self.adjudicator_generated_values.items()}})
         if self.options.goal == self.options.goal.option_random_order:
             data.update({'mission_order': self.dmc3_mission_order})
-        data.update(self.options.as_dict("start_melee", "start_second_melee", "start_gun", "start_second_gun",
+            # TODO Maybe dont disable those this version and instead disable for 0.6.0?
+        data.update(self.options.as_dict(#"start_melee", "start_second_melee", "start_gun", "start_second_gun",
                                          "randomize_skills", "randomize_gun_levels", "randomize_styles",
                                          "purple_orb_mode",
                                          "devil_trigger_mode", "goal", "mission_clear_rank", "mission_clear_difficulty",

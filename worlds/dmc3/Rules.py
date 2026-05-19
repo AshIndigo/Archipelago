@@ -83,7 +83,15 @@ def add_generic_rules(world):
     # Extra insurance, even if it may be un-needed. Both locations are in the same room.
     add_rule(world.multiworld.get_location("Mission #14 - Combat Adjudicator #9", world.player),
              lambda state: state.can_reach_location("Mission #14 - Beowulf", world.player))
-
+    # All of these M14 Checks are past the adjudicator
+    add_rule(world.multiworld.get_location("Mission #14 - Vital Star S", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Vital Star S #2", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Blue Orb Fragment #7", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Holy Water", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
     # Astronomical board removes the walls blocking access
     add_rule(world.multiworld.get_location("Mission #5 - Vajura", world.player),
              lambda state: state.has("Astronomical Board", world.player))
@@ -201,8 +209,8 @@ def set_dmc3_rules(dmc3_world) -> None:
         add_mission_order_rules(dmc3_world)
     add_generic_rules(dmc3_world)
     add_mission_complete_rules(dmc3_world)
-    # if dmc3_world.options.shop_gun_checks:
-    #     add_gun_shop_rules(dmc3_world)
+    if dmc3_world.options.shop_gun_checks:
+        add_gun_shop_rules(dmc3_world)
 
     # For allowing SS Checks to have useful or filler
     if dmc3_world.options.enabled_ss_rank and dmc3_world.options.useful_ss_checks:
