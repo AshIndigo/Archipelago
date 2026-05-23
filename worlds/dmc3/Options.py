@@ -310,7 +310,7 @@ class ShopGunChecks(Toggle):
 
     You will need the specific gun for the checks
     """
-    display_name = "NYI Gun Store Checks"
+    display_name = "Gun Store Checks"
 
 
 class ShopSkillChecks(Toggle):
