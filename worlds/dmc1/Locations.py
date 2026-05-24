@@ -9,7 +9,7 @@ location_descriptions = {
 
 @dataclass
 class BaseLocationData:
-    mission_number: int = 0  # Mission Number, 0 if irrelevant
+    mission_number: int = 40  # Mission Number, 40 if generic (0 is used for very start of game)
     room_number: int = 0 # Room Number
     track_number: int = 0
     default_item: int = 0 # Default Item

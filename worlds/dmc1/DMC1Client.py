@@ -8,8 +8,8 @@ import Utils
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from MultiServer import Endpoint
 from NetUtils import decode, encode, NetworkItem
-from .Items import key_items, dmc1_items
-from .Skills import weapon_skills
+from .Items import key_items, ordered_items
+from .Skills import ordered_skills
 
 DEBUG = False
 
@@ -37,7 +37,7 @@ class DMC1CommandProcessor(ClientCommandProcessor):
 class DMC1Context(CommonContext):
     command_processor = DMC1CommandProcessor
     game = "Devil May Cry 1"
-    item_name_to_id = {name: data.code for name, data in (dmc1_items | weapon_skills).items() if
+    item_name_to_id = {name: data.code for name, data in (ordered_items | ordered_skills).items() if
                        data.code is not None}
     item_id_to_name = {code: name for name, code in item_name_to_id.items()}
 
@@ -125,9 +125,9 @@ class DMC1Context(CommonContext):
 
                 for item in args["items"]:
                     self.inventory.append(NetworkItem(*item))
-                    if NetworkItem(*item).item == dmc1_items.get("Blue Orb").code:
+                    if NetworkItem(*item).item == ordered_items.get("Blue Orb").code:
                         self.blue_orbs += 1
-                    if NetworkItem(*item).item == dmc1_items.get("Purple Orb").code:
+                    if NetworkItem(*item).item == ordered_items.get("Purple Orb").code:
                         self.purple_orbs += 1
                     if gui_enabled:
                         self.ui.checklist[self.item_id_to_name[NetworkItem(*item).item]] = True
@@ -185,10 +185,11 @@ async def proxy(websocket, path: str = "/", ctx: DMC1Context = None):
                         ctx.items_handling = msg["items_handling"]
 
                     if msg["cmd"] == "Bounce":
-                        if "DeathLink" in msg["tags"]:
-                            if "DeathLink" not in ctx.tags:
-                                print("Deathlink was disabled")
-                                break
+                        if "tags" in msg:
+                            if "DeathLink" in msg["tags"]:
+                                if "DeathLink" not in ctx.tags:
+                                    print("Deathlink was disabled")
+                                    break
 
                     if not ctx.is_proxy_connected():
                         break

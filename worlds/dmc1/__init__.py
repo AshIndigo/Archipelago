@@ -2,13 +2,13 @@ from typing import Dict, Any
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import item_descriptions, DMC1Item, dmc1_items, ItemData, junk_pool, item_name_groups
+from .Items import item_descriptions, DMC1Item, ordered_items, ItemData, junk_pool, item_name_groups
 from .Locations import location_descriptions, DMC1Location, \
     dmc1_locations, location_name_groups
 from .Options import DMC1Options
 from .Regions import dmc1_regions, setup_linear_goal
 from .Rules import *
-from .Skills import *
+from .Skills import ordered_skills
 from ..LauncherComponents import Component, components, launch as launch_component, Type
 
 DEBUG = False
@@ -57,7 +57,7 @@ class DevilMayCry1World(World):
     base_id = 1
     dmc1_mission_order = [i for i in range(1, 24)]
 
-    item_name_to_id = {name: data.code for name, data in (dmc1_items | weapon_skills).items() if
+    item_name_to_id = {name: data.code for name, data in (ordered_items | ordered_skills).items() if
                        data.code is not None}
 
     location_name_to_id = {name: id for id, name in
@@ -71,7 +71,7 @@ class DevilMayCry1World(World):
         super(DevilMayCry1World, self).__init__(world, player)
 
     def create_item(self, item: str) -> DMC1Item:
-        item = DMC1Item(item, (dmc1_items | weapon_skills)[item].classification,
+        item = DMC1Item(item, (ordered_items | ordered_skills)[item].classification,
                         self.item_name_to_id[item],
                         self.player)
         return item
@@ -125,16 +125,13 @@ class DevilMayCry1World(World):
 
         # Initial item pool before excludes are taken out
         initial_item_pool = []
-        for item in map(self.create_item, dmc1_items):
+        for item in map(self.create_item, ordered_items):
             initial_item_pool.append(item)
         # Skill handling
         if self.options.randomize_skills:
             # Adds all skills to the pool
-            for skill in map(self.create_item, weapon_skills):
-                initial_item_pool.append(skill)
-            # Progressive skills need a second copy to reach max level
-            for skill in map(self.create_item, self.item_name_groups["upgradable_skills"]):
-                initial_item_pool.append(skill)
+            for skill, data in sorted(ordered_skills.items()):
+                initial_item_pool.extend([self.create_item(skill) for _ in range(data.copies)])
 
         final_item_pool = []
         # Add enough blue and purple to ensure max magic+hp can be obtained
@@ -174,8 +171,7 @@ class DevilMayCry1World(World):
         }
         if self.options.goal == self.options.goal.option_random_order:
             data.update({'mission_order': self.dmc3_mission_order})
-        data.update(self.options.as_dict(
-                                         "randomize_skills", "purple_orb_mode",
+        data.update(self.options.as_dict("randomize_skills", "purple_orb_mode",
                                          "devil_trigger_mode", "goal", "shop_orb_checks", "auto_orb_hints",
                                          "death_link", toggles_as_bools=True))
         return data

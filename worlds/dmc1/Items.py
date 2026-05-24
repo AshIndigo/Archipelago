@@ -12,6 +12,7 @@ item_descriptions = {
 class ItemData:
     code: int
     classification: ItemClassification
+    copies: int = 1
 
 
 item_name_groups = {
@@ -83,8 +84,15 @@ dmc1_items: dict[str, ItemData] = {
     "Red Orbs - 200": ItemData(43, ItemClassification.filler),
 }
 
+ordered_items = dict(
+    sorted(
+        dmc1_items.items(),
+        key=lambda x: x[0]  # or a custom key if ItemData has fields
+    )
+)
+
 key_items: list[str] = [
-    k for k, v in dmc1_items.items() if v.code in range(18, 34) or "Rusty Key" in k
+    k for k, v in ordered_items.items() if v.code in range(18, 34) or "Rusty Key" in k
 ]
 
 junk_pool: dict[str, int] = {
