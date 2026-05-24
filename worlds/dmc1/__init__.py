@@ -176,6 +176,6 @@ class DevilMayCry1World(World):
             data.update({'mission_order': self.dmc3_mission_order})
         data.update(self.options.as_dict(
                                          "randomize_skills", "purple_orb_mode",
-                                         "devil_trigger_mode", "goal", "shop_orb_checks", "auto_orb_hints"
+                                         "devil_trigger_mode", "goal", "shop_orb_checks", "auto_orb_hints",
                                          "death_link", toggles_as_bools=True))
         return data
