@@ -179,10 +179,11 @@ async def proxy(websocket, path: str = "/", ctx: DMC3Context = None):
                         ctx.items_handling = msg["items_handling"]
 
                     if msg["cmd"] == "Bounce":
-                        if "DeathLink" in msg["tags"]:
-                            if "DeathLink" not in ctx.tags:
-                                print("Deathlink was disabled")
-                                break
+                        if "tags" in msg:
+                            if "DeathLink" in msg["tags"]:
+                                if "DeathLink" not in ctx.tags:
+                                    print("Deathlink was disabled")
+                                    break
 
                     await ctx.send_msgs([msg])
 

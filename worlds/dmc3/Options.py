@@ -311,7 +311,7 @@ class ShopGunChecks(Toggle):
 
     You will need the specific gun for the checks
     """
-    display_name = "NYI Gun Store Checks"
+    display_name = "Gun Store Checks"
 
 
 class ShopSkillChecks(Toggle):
@@ -415,10 +415,10 @@ class DMC3Options(PerGameCommonOptions):
     mission_group: MissionOrderGroup
     exclude_locations: DMC3ExcludeLocations
     shop_orb_checks: ShopOrbChecks
-    # shop_gun_checks: ShopGunChecks
+    shop_gun_checks: ShopGunChecks
     # shop_skill_checks: ShopSkillChecks
     auto_orb_hints: AutoOrbHints
-    # auto_gun_hints: AutoGunHints
+    auto_gun_hints: AutoGunHints
     # auto_skill_hints: AutoSkillHints
     character_selection: CharacterSelection
     start_melee_vergil: StartMeleeVergil
@@ -437,8 +437,8 @@ option_groups = [
     OptionGroup("Shop Options", [
         ShopOrbChecks,
         AutoOrbHints,
-        # ShopGunChecks,
-        # AutoGunHints,
+        ShopGunChecks,
+        AutoGunHints,
         # ShopSkillChecks,
         # AutoSkillHints
     ]),

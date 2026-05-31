@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from .Items import item_name_groups, ItemData
+from .Items import ItemData
 
 # We are going to treat everything >=0x40 as skills
 weapon_skills_dante: dict[str, ItemData] = {
@@ -46,7 +46,7 @@ weapon_skills_dante: dict[str, ItemData] = {
     "Beowulf - Straight Level 2": ItemData(
         0x4F, ItemClassification.useful),
     # Progression
-    "Beowulf - Progressive Uppercut": ItemData(  # Beowulf - Beast Uppercut
+    "Beowulf - Progressive Uppercut": ItemData( # Beowulf - Beast Uppercut
         0x50, ItemClassification.useful, 2),
     # "Beowulf - Rising Dragon": ItemData(
     #     0x51, ItemClassification.useful),

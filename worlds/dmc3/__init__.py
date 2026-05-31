@@ -6,10 +6,10 @@ from BaseClasses import Tutorial, Region
 from Options import Option
 from Utils import Version
 from worlds.AutoWorld import WebWorld, World
-from .Items import item_descriptions, DMC3Item, dmc3_items, ItemData, junk_pool, vergil_items, dante_items
+from .Items import item_descriptions, DMC3Item, dmc3_items, ItemData, junk_pool, ordered_items, item_name_groups
 from .Locations import location_descriptions, DMC3Location, BaseLocationData, adjudicators, \
-    adjudicator_info, dmc3_locations, location_name_groups, default_shop_locations, gun_level_purchases, Adjudicator, \
-    weapon_skill_purchases
+    adjudicator_info, location_name_groups, default_shop_locations, gun_level_purchases, Adjudicator, \
+    weapon_skill_purchases, ordered_locations, dmc3_locations
 from .Options import DMC3Options, option_groups
 from .Regions import dmc3_regions, setup_all_goal, setup_linear_goal
 from .Rules import *
@@ -95,7 +95,8 @@ class DevilMayCry3World(World):
     settings: ClassVar[DMC3Settings]
     base_id = 1
 
-    item_name_to_id = item_name_to_id
+    item_name_to_id = {name: data.code for name, data in (dmc3_items | combined_upgrades | styles).items() if
+                       data.code is not None}
 
     location_name_to_id = {name: id for id, name in
                            enumerate(dmc3_locations, base_id)}
@@ -166,14 +167,37 @@ class DevilMayCry3World(World):
                 if opt is not None:
                     # You can also set .value directly but that won't work if you have OptionSets
                     setattr(self.options, key, opt.from_any(value))
-
         # Dante and Vergil specific options
         if self.options.character_selection == self.options.character_selection.option_dante:
             self.generate_early_dante()
         elif self.options.character_selection == self.options.character_selection.option_vergil:
             self.generate_early_vergil()
+        # # Check to see if both melee slots have the same weapon
+        # if self.options.start_melee.value == self.options.start_second_melee.value:
+        #     print("Both melee slots have the same weapon, re-rolling second melee")
+        #     # Need to pick from a pool of weapons we don't already have
+        #     self.options.start_second_melee.value = \
+        #         self.random.choice([n for n in [0, 1, 2, 3, 4] if n != self.options.start_melee.value])
+        #
+        # # Check to see if both gun slots have the same gun
+        # if self.options.start_gun.value == self.options.start_second_gun.value:
+        #     print("Both gun slots have the same gun, re-rolling second gun")
+        #     # Need to pick from a pool of guns we don't already have
+        #     self.options.start_second_gun.value = \
+        #         self.random.choice([n for n in [5, 6, 7, 8, 9] if n != self.options.start_gun.value])
 
-        # Goal Related
+        # Add starting weapons to precollected pool
+        # for option_value in [
+        #     self.options.start_melee.value,
+        #     self.options.start_gun.value,
+        #     self.options.start_second_melee.value,
+        #     self.options.start_second_gun.value,
+        # ]:
+        #     if option_value != 255:
+        #         self.multiworld.push_precollected(
+        #             self.create_item(get_weapon_name_from_option(option_value))
+        #         )
+
         if self.options.goal == self.options.goal.option_random_order and not hasattr(self.multiworld,
                                                                                       "generation_is_fake"):
             match self.options.mission_shuffle.value:
@@ -188,20 +212,20 @@ class DevilMayCry3World(World):
                     self.weighted_mission_order()
 
             print(f"Mission Order: {self.dmc3_mission_order}")
-
+        # If a style isn't already in the start inventory, pick one at random
+        if self.options.randomize_styles:
+            if styles.keys() & self.options.start_inventory.keys():
+                pass
+            else:
+                self.push_precollected(self.create_item(self.random.choice(Items.styles)))
         # Generate random adjudicator settings
         if self.options.random_adjudicators and not hasattr(self.multiworld, "generation_is_fake"):
-            for (adjudicator, info) in self.adjudicator_generated_values.items():
-                # Whether to use Dante or Vergil's Melee list
-                if self.options.character_selection == self.options.character_selection.option_dante:
-                    info.weapon = \
-                        self.random.choices(Items.item_name_groups["melees"])[
-                            0]
-                elif self.options.character_selection == self.options.character_selection.option_vergil:
-                    info.weapon = \
-                        self.random.choices(Items.item_name_groups["melees_vergil"])[
-                            0]
-
+            for adjudicator, info in sorted(
+                    self.adjudicator_generated_values.items(),
+                    key=lambda x: x[0]
+            ):
+                info.weapon = \
+                    self.random.choice(Items.melees)
                 if self.options.adjudicator_rankings.value != self.options.adjudicator_rankings.option_unchanged:
                     info.ranking = Locations.Ranking(
                         self.random.randrange(Locations.Ranking.C.value, self.options.adjudicator_rankings.value + 1))
@@ -215,9 +239,9 @@ class DevilMayCry3World(World):
                 self.options.start_location_hints.value.add(k)
 
         # Gun Purchases
-        # if self.options.auto_gun_hints.value == self.options.auto_gun_hints.option_all:
-        #     for k in gun_level_purchases:
-        #         self.options.start_location_hints.value.add(k)
+        if self.options.auto_gun_hints.value == self.options.auto_gun_hints.option_all:
+            for k in gun_level_purchases:
+                self.options.start_location_hints.value.add(k)
 
         # Skill Purchases
         # if self.options.auto_skill_hints.value == self.options.auto_skill_hints.option_all:
@@ -288,11 +312,11 @@ class DevilMayCry3World(World):
                 m_loc: self.location_name_to_id[m_loc]
                 for m_loc in [loc for loc in default_shop_locations]
             }, DMC3Location)
-        # if self.options.shop_gun_checks:
-        #     menu_region.add_locations({
-        #         m_loc: self.location_name_to_id[m_loc]
-        #         for m_loc in [loc for loc in gun_level_purchases]
-        #     }, DMC3Location)
+        if self.options.shop_gun_checks:
+            menu_region.add_locations({
+                m_loc: self.location_name_to_id[m_loc]
+                for m_loc in [loc for loc in gun_level_purchases]
+            }, DMC3Location)
         self.multiworld.regions.append(menu_region)
         # Setup missions+secret missions
         for mission_idx in range(20):
@@ -304,7 +328,7 @@ class DevilMayCry3World(World):
             current_region = Region(mission_name, self.player, self.multiworld)
             current_region.add_locations({
                 m_loc: self.location_name_to_id[m_loc]
-                for m_loc in [loc for loc in dmc3_locations if dmc3_locations[loc].mission_number == mission
+                for m_loc in [loc for loc in ordered_locations if ordered_locations[loc].mission_number == mission
                               and "SS Rank" not in loc]
             }, DMC3Location)
 
@@ -312,7 +336,7 @@ class DevilMayCry3World(World):
             if self.options.enabled_ss_rank:
                 current_region.add_locations({
                     m_loc: self.location_name_to_id[m_loc]
-                    for m_loc in [loc for loc in dmc3_locations if dmc3_locations[loc].mission_number == mission
+                    for m_loc in [loc for loc in ordered_locations if ordered_locations[loc].mission_number == mission
                                   and "SS Rank" in loc]
                 }, DMC3Location)
 
@@ -343,11 +367,10 @@ class DevilMayCry3World(World):
                     secret_region.add_exits(["Menu", mission_name])
 
     def create_item(self, name: str) -> DMC3Item:
-        return DMC3Item(name,
-                        (dmc3_items | dante_items | vergil_items | combined_upgrades | styles_dante | styles_vergil)[
-                            name].classification,
+        item = DMC3Item(name, (dmc3_items | dante_items | vergil_items  | combined_upgrades | styles_dante | styles_vergil)[name].classification,
                         self.item_name_to_id[name],
                         self.player)
+        return item
 
     def create_items(self) -> None:
         # Setup exclude list so dupes aren't in pool
@@ -361,7 +384,7 @@ class DevilMayCry3World(World):
 
         # Initial item pool before excludes are taken out
         initial_item_pool = []
-        for item in map(self.create_item, dmc3_items):
+        for item in map(self.create_item, ordered_items):
             initial_item_pool.append(item)
 
         # Dante and Vergil specific options
@@ -369,6 +392,23 @@ class DevilMayCry3World(World):
             self.create_items_dante(initial_item_pool)
         elif self.options.character_selection == self.options.character_selection.option_vergil:
             self.create_items_vergil(initial_item_pool)
+
+
+        # # Style handling
+        # if self.options.randomize_styles:
+        #     for style, _ in sorted(styles.items()):
+        #         # Every style has 3 levels, 1st level actually unlocks it
+        #         initial_item_pool.extend([self.create_item(style) for _ in range(3)])
+        #
+        # # Skill+Gun level handling
+        # if self.options.randomize_skills:
+        #     # Adds all skills to the pool
+        #     for skill, data in sorted(weapon_skills.items()):
+        #         initial_item_pool.extend([self.create_item(skill) for _ in range(data.copies)])
+        # if self.options.randomize_gun_levels:
+        #     for gun, _ in sorted(gun_levels.items()):
+        #         # All guns go up to level 3, starting at 1
+        #         initial_item_pool.extend([self.create_item(gun) for _ in range(2)])
 
         final_item_pool = []
         # Add enough blue and purple to ensure max magic+hp can be obtained
@@ -378,7 +418,7 @@ class DevilMayCry3World(World):
 
         # Remaining 3 if Purple mode is on, otherwise DT Item will be used to reach 10k magic
         if self.options.purple_orb_mode:
-            final_item_pool.extend([self.create_item("Purple Orb") for _ in range(3)])
+            final_item_pool.extend(sorted([self.create_item("Purple Orb") for _ in range(3)]))
 
         # If we have 10 purple orbs in world and don't need the DT item to unlock DT, remove it from the world
         # If purple mode is off, then we need the DT item, and if DT mode is on, we need the DT item
@@ -386,7 +426,7 @@ class DevilMayCry3World(World):
             exclude.append(self.create_item("Devil Trigger"))
 
         # Remove any items that are in the excluded pool
-        for item in initial_item_pool:
+        for item in sorted(initial_item_pool):
             if item in exclude:
                 exclude.remove(item)  # this is destructive. create unique list above
             else:
@@ -394,10 +434,10 @@ class DevilMayCry3World(World):
 
         if DEBUG:
             print("Item pool len: {}".format(len(final_item_pool)))
-            print("Location count: {}".format(len(dmc3_locations)))
+            print("Location count: {}".format(len(ordered_locations)))
         while len(final_item_pool) < len(self.multiworld.get_unfilled_locations(self.player)):
             final_item_pool.append(self.create_item(self.get_filler_item_name()))
-        self.multiworld.itempool += final_item_pool
+        self.multiworld.itempool += sorted(final_item_pool)
 
     def create_items_dante(self, initial_item_pool: List[DMC3Item]) -> None:
         for item in map(self.create_item, dante_items):
@@ -462,19 +502,15 @@ class DevilMayCry3World(World):
             data.update({'adjudicators': {key: asdict(adj) for key, adj in self.adjudicator_generated_values.items()}})
         if self.options.goal == self.options.goal.option_random_order:
             data.update({'mission_order': self.dmc3_mission_order})
-        # Only provide character relevant options
-        if self.options.character_selection == self.options.character_selection.option_dante:
-            data.update(self.options.as_dict("start_melee", "start_second_melee", "start_gun", "start_second_gun"))
-        if self.options.character_selection == self.options.character_selection.option_vergil:
-            data.update(self.options.as_dict("start_melee_vergil"))
-        data.update(self.options.as_dict(
-            "randomize_skills", "randomize_gun_levels", "randomize_styles",
-            "purple_orb_mode",
-            "devil_trigger_mode", "goal", "mission_clear_rank", "mission_clear_difficulty",
-            "initially_unlocked_difficulties", "enabled_ss_rank", "check_ss_difficulty", "character_selection",
-            "shop_orb_checks",  # "shop_gun_checks", "shop_skill_checks",
-            "auto_orb_hints",  # "auto_gun_hints", "auto_skill_hints",
-            "death_link", toggles_as_bools=True))
+            # TODO Maybe dont disable those this version and instead disable for 0.6.0?
+        data.update(self.options.as_dict(#"start_melee", "start_second_melee", "start_gun", "start_second_gun",
+                                         "randomize_skills", "randomize_gun_levels", "randomize_styles",
+                                         "purple_orb_mode",
+                                         "devil_trigger_mode", "goal", "mission_clear_rank", "mission_clear_difficulty",
+                                         "initially_unlocked_difficulties", "enabled_ss_rank", "check_ss_difficulty",
+                                         "shop_orb_checks", "shop_gun_checks", #"shop_skill_checks",
+                                         "auto_orb_hints", "auto_gun_hints", #"auto_skill_hints",
+                                                                              "death_link", toggles_as_bools=True))
         return data
 
     # Universal Tracker support

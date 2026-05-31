@@ -1,3 +1,4 @@
+from BaseClasses import MultiWorld
 from ..dmc3 import adjudicators
 from ..generic.Rules import add_rule, add_item_rule
 
@@ -84,7 +85,7 @@ def add_mission_order_rules(world):
             world.multiworld.get_entrance(
                 f"Mission #{mission_idx} -> Mission #{world.dmc3_mission_order[idx + 1]}",
                 world.player)
-        )
+            )
 
 
 # Generic Location rules, independent of goal
@@ -99,7 +100,15 @@ def add_generic_rules(world):
     # Extra insurance, even if it may be un-needed. Both locations are in the same room.
     add_rule(world.multiworld.get_location("Mission #14 - Combat Adjudicator #9", world.player),
              lambda state: state.can_reach_location("Mission #14 - Beowulf", world.player))
-
+    # All of these M14 Checks are past the adjudicator
+    add_rule(world.multiworld.get_location("Mission #14 - Vital Star S", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Vital Star S #2", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Blue Orb Fragment #7", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
+    add_rule(world.multiworld.get_location("Mission #14 - Holy Water", world.player),
+             lambda state: state.can_reach_location("Mission #14 - Combat Adjudicator #9", world.player))
     # Astronomical board removes the walls blocking access
     add_rule(world.multiworld.get_location("Mission #5 - Vajura", world.player),
              lambda state: state.has("Astronomical Board", world.player))
@@ -111,6 +120,10 @@ def add_generic_rules(world):
     # Across the pit that needs the soul of steel to cross
     add_rule(world.multiworld.get_location("Mission #5 - Agni and Rudra", world.player),
              lambda state: state.has("Soul of Steel", world.player))
+
+    # Adjudicator is right outside the door you blast open with the laser
+    add_rule(world.multiworld.get_location("Mission #6 - Combat Adjudicator #3", world.player),
+             lambda state: state.has_group_unique("essences", world.player, 2))
 
     # Needed to dispel the flames blocking the door to this room
     add_rule(world.multiworld.get_location("Mission #7 - Crystal Skull", world.player),
@@ -131,9 +144,13 @@ def add_generic_rules(world):
     add_rule(world.multiworld.get_location("Mission #16 - Kalina Ann", world.player),
              lambda state: state.has("Golden Sun", world.player) and state.has("Onyx Moonshard", world.player))
 
+    # Past the door that needs those two key items
+    add_rule(world.multiworld.get_location("Mission #16 - Vital Star S", world.player),
+             lambda state: state.has("Golden Sun", world.player) and state.has("Onyx Moonshard", world.player))
+
     # Statue needs all 3 essences to lower down artemis
     add_rule(world.multiworld.get_location("Mission #6 - Artemis", world.player),
-             lambda state: state.count_group("essences", world.player) == 3)
+             lambda state: state.has_group_unique("essences", world.player, 3))
 
     # Need Soul of Steel to cross the pit and open the door
     add_rule(world.multiworld.get_location("Secret Mission #2", world.player),
@@ -152,7 +169,7 @@ def add_mission_complete_rules(world):
 
     # Statue laser needs 2 essences
     add_rule(world.multiworld.get_location("Mission #6 Complete", world.player),
-             lambda state: state.count_group("essences", world.player) >= 2)
+             lambda state: state.has_group_unique("essences", world.player, 2))
 
     # Opens the door leading to Vergil's Arena
     add_rule(world.multiworld.get_location("Mission #7 Complete", world.player),
@@ -184,7 +201,7 @@ def add_mission_complete_rules(world):
 
     # Elevator needs all 3 fragments
     add_rule(world.multiworld.get_location("Mission #15 Complete", world.player),
-             lambda state: state.count_group("fragments", world.player) == 3)
+             lambda state: state.has_group_unique("fragments", world.player, 3))
 
     # Door needs both to be slotted in
     add_rule(world.multiworld.get_location("Mission #16 Complete", world.player),
@@ -198,17 +215,18 @@ def add_mission_complete_rules(world):
 def add_gun_shop_rules(world):
     for gun in world.item_name_groups["guns"]:
         add_rule(world.multiworld.get_location(f"Purchase {gun} Level 2", world.player),
-                  lambda state, gun_name=gun: state.has(gun_name, world.player))
+                 lambda state, gun_name=gun: state.has(gun_name, world.player))
         add_rule(world.multiworld.get_location(f"Purchase {gun} Level 3", world.player),
-                  lambda state, gun_name=gun: state.has(gun_name, world.player))
+                 lambda state, gun_name=gun: state.has(gun_name, world.player))
+
 
 def set_dmc3_rules(dmc3_world) -> None:
     if dmc3_world.options.goal.value != 1:
         add_mission_order_rules(dmc3_world)
     add_generic_rules(dmc3_world)
     add_mission_complete_rules(dmc3_world)
-    # if dmc3_world.options.shop_gun_checks:
-    #     add_gun_shop_rules(dmc3_world)
+    if dmc3_world.options.shop_gun_checks:
+        add_gun_shop_rules(dmc3_world)
 
     # For allowing SS Checks to have useful or filler
     if dmc3_world.options.enabled_ss_rank and dmc3_world.options.useful_ss_checks:
