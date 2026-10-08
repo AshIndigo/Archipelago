@@ -16,13 +16,17 @@ The file can be found at
 
 Or a similar location, depending on where Steam is installed
 ## 1. Downgrade your game
-Follow the instructions from the link below to downgrade your game to the version compatible with the mod.
+Follow the instructions below to downgrade your game to the version compatible with the mod. (This is due to the 2026 update breaking the mod)
 
-https://github.com/serpentiem/ddmk?tab=readme-ov-file#devil-may-cry-hd-collection
+1. Open the Run prompt in windows, press Win+R to quickly open it
+2. Enter in `steam://open/console` this will enable the console in Steam (There will be a new tab)
+3. Run the command `download_depot 631510 631511 7018858071300627307`
 
-If you have used DDMK or DMC3-Crimson before, chances are your game is already properly downgraded.
+It'll take a little bit to run because it's downloading the game again
+When it's finished, the console will say where it downloaded the files
+Most likely it'll be under `C:\Program Files (x86)\Steam\steamapps\content\app_631510\depot_631511`
 
-Note: The mod will not load hooks for DDMK if it is not version 2.7.3 from Github. Additionally, while the mod will not stop itself from loading if DMC3 is not properly patched. Issues or crashes will most likely occur.
+Re-mod your game in that new folder and play from there.
 ## 2. Install the loader
 Download the DMCHDLoader zip from https://github.com/ashindigo/DMCHDLoader/releases and extract the `dinput8.dll`.
 
@@ -37,7 +41,7 @@ Extract the `dmc3_randomizer.dll` from the zip file and insert it into the same 
 
 If the mod has been successfully installed, start up DMC3 and you should have a console window as well as overlay text on the main menu.
 
-## 3. Connect to a room
+## 4. Connect to a room
 It is recommended that before launching DMC3, you start up the DMC3 Client available in the Archipelago launcher. This launcher is what you use to connect to the room.
 
 Once the client is connected, start up Devil May Cry 3, it should then connect to the Archipelago client. You can use the command "/dmc3" in the Archipelago client to verify that it is connected
@@ -46,7 +50,7 @@ If for some reason the mod doesn't seem to be connecting despite correct informa
 
 Once you are properly connected you can now use the new game button on the main menu to begin playing
 
-## 4. Start up DMC3 straight from the exe file
+## 5. Start up DMC3 straight from the exe file
 
 There is a `steam_appid.txt` file in the loader's zip, put this in the same place as your `dmc3.exe`, this will allow you to start up DMC3 from its EXE and skip the launcher. While technically this should be optional, people have reported that the mod acts up without the file.
 
