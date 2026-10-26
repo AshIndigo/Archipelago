@@ -15,9 +15,9 @@ class BaseLocationData:
     default_item: int = 0 # Default Item
     secret: bool = False  # Secret mission?
     offset: int = 0x0  # Offset
-    xCoord: int = 0
-    yCoord: int = 0
-    zCoord: int = 0
+    xCoord: float = 0.0
+    yCoord: float = 0.0
+    zCoord: float = 0.0
 
 default_shop_locations: dict[str, BaseLocationData] = ({
     # Blue Orb Purchases
@@ -49,7 +49,7 @@ dmc1_locations: dict[str, BaseLocationData] = ({
     # Main Hall
     "Mission #1 - Blue Orb Fragment #2": BaseLocationData(mission_number=1, room_number=0, default_item=35, track_number=1), # room 0?
     # Knight room passed 45 red orb door
-    "Mission #1 - Blue Orb Fragment #3": BaseLocationData(mission_number=1, room_number=1, default_item=35, track_number=1),
+    "Mission #1 - Blue Orb Fragment #3": BaseLocationData(mission_number=1, room_number=1, default_item=35, track_number=1, xCoord=300.0, yCoord=500.0, zCoord=-5400.0),
     # Castle room that wants the trident
     "Mission #1 - Blue Orb Fragment #4": BaseLocationData(mission_number=1, room_number=28, default_item=35, track_number=1),
     # Plane room
@@ -69,7 +69,7 @@ dmc1_locations: dict[str, BaseLocationData] = ({
 
     # M3
     # After bridge shatters, go back to the end with hermes sign.
-    "Mission #3 - Blue Orb Fragment #7": BaseLocationData(mission_number=3, room_number=12, default_item=35, track_number=1),
+    "Mission #3 - Blue Orb Fragment #7": BaseLocationData(mission_number=3, room_number=12, default_item=35, track_number=1, xCoord=35100.0, yCoord=875.0, zCoord=8550.0),
     # From main door, do parkour up to main floating platform. Need stinger, air raid or maybe air hike
     "Mission #3 - Blue Orb Fragment #8": BaseLocationData(mission_number=3, room_number=12, default_item=35, track_number=1),
     # Beat up phantom after doing parkour
@@ -102,7 +102,7 @@ dmc1_locations: dict[str, BaseLocationData] = ({
     # Horse parkour, jump between statues
     "Mission #8 - Blue Orb Fragment #11": BaseLocationData(mission_number=8, room_number=4, default_item=35, track_number=1),
     # Past iron gate once Trident is used
-    "Mission #8 - Blue Orb Fragment #12": BaseLocationData(mission_number=8, room_number=1, default_item=35, track_number=1),
+    "Mission #8 - Blue Orb Fragment #12": BaseLocationData(mission_number=8, room_number=1, default_item=35, track_number=1, xCoord=500.0, yCoord=-300.0, zCoord=-1150.0),
     # Take it off a skeleton in lever room
     "Mission #8 - Grenadegun": BaseLocationData(mission_number=8, room_number=29, default_item=4, track_number=1),
     # Beat up Phantom #2 and jump down

@@ -78,6 +78,14 @@ class DMC1Goal(Choice):
     option_random_order = 2
     default = 0
 
+class SecretMissions(Toggle):
+    """
+    Adds Secret Missions as checks
+
+    Some of these are a pain, highly recommend making use of excluded locations
+    """
+    display_name = "Secret Missions"
+
 class ShopOrbChecks(Toggle):
     """
     Add checks to the store.
@@ -176,6 +184,7 @@ class DMC1Options(PerGameCommonOptions):
     purple_orb_mode: PurpleOrbMode
     devil_trigger_mode: DevilTriggerMode
     goal: DMC1Goal
+    secret_missions: SecretMissions
     shop_orb_checks: ShopOrbChecks
     auto_orb_hints: AutoOrbHints
     mission_shuffle: MissionShuffle
@@ -189,6 +198,6 @@ dmc1_presets = {
         # "purple_orb_mode": False,
         # "devil_trigger_mode": True,
         # "goal": "standard",
-        # "exclude_locations": ["Secret Mission #3", "Secret Mission #6", "Secret Mission #7", "Secret Mission #12"]
+        "exclude_locations": [f"Secret Mission #{numb}" for numb in range(1,13)] + [f"Purchase Purple Orb #{numb}" for numb in range(1,8)]
     }
 }

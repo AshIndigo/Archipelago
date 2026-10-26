@@ -1,3 +1,4 @@
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import add_rule
 
 
@@ -116,9 +117,12 @@ def add_mission_complete_rules(world):
     # The Staff of Judgement is used to open the door that Alastor is obtained from
     add_rule(world.multiworld.get_location("Mission #2 Complete", world.player),
              lambda state: state.has("Staff of Judgement", world.player))
+    # Pride of Lion is used to unlock the lion door in M4. (TODO Double check this one)
+    add_rule(world.multiworld.get_entrance("Mission #3", world.player),
+             lambda state: state.has("Pride of Lion", world.player))
     # Death Sentence is used to unlock the bust holding the Melancholy Soul which triggers the Nelo Angelo fight
     add_rule(world.multiworld.get_location("Mission #4 Complete", world.player),
-             lambda state: state.has("Death Sentence", world.player))
+             lambda state: state.has("Death Sentence", world.player) and state.has("Pride of Lion", world.player))
     # Melancholy Soul is used to unlock a door at the end of the mission
     add_rule(world.multiworld.get_location("Mission #5 Complete", world.player),
              lambda state: state.has("Melancholy Soul", world.player))
@@ -164,6 +168,8 @@ def add_mission_complete_rules(world):
 def add_misc_rules(world):
     # Need to be able to reach the fragment
     add_rule(world.multiworld.get_location("Mission #3 - Blue Orb Fragment #8", world.player),
+             lambda state: has_air_hike(state, world))
+    add_rule(world.multiworld.get_location("Mission #5 - Blue Orb Fragment #9", world.player),
              lambda state: has_air_hike(state, world))
     # Stupid boat jump, maybe can do it with air hike?
     add_rule(world.multiworld.get_location("Mission #12 - Blue Orb Fragment #16", world.player),
